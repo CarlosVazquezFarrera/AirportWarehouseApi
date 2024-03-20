@@ -29,5 +29,11 @@ namespace AirportWarehouse.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("Name")]
+        public string GetName()
+        {
+            return Environment.GetEnvironmentVariable("name") ?? "Sin valor";
+        }
     }
 }
