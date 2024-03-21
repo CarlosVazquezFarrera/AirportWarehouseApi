@@ -1,4 +1,4 @@
-namespace AirportWarehouse
+﻿namespace AirportWarehouse.Core.Entites
 {
     public class WeatherForecast
     {

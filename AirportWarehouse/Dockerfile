@@ -10,6 +10,8 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["AirportWarehouse/AirportWarehouse.csproj", "AirportWarehouse/"]
+COPY ["AirportWarehouse.Core/AirportWarehouse.Core.csproj", "AirportWarehouse.Core/"]
+COPY ["AirportWarehouse.Infrastructure/AirportWarehouse.Infrastructure.csproj", "AirportWarehouse.Infrastructure/"]
 RUN dotnet restore "./AirportWarehouse/AirportWarehouse.csproj"
 COPY . .
 WORKDIR "/src/AirportWarehouse"

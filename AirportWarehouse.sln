@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportWarehouse", "AirportWarehouse\AirportWarehouse.csproj", "{FAF9D2C7-9081-42EB-931A-88D0DA211F0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AirportWarehouse", "AirportWarehouse\AirportWarehouse.csproj", "{FAF9D2C7-9081-42EB-931A-88D0DA211F0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportWarehouse.Core", "AirportWarehouse.Core\AirportWarehouse.Core.csproj", "{FA373590-60AC-4F71-BAEC-7291B834EC8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportWarehouse.Infrastructure", "AirportWarehouse.Infrastructure\AirportWarehouse.Infrastructure.csproj", "{E7E755DD-C5A4-48E2-BC79-59598EEFE7DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{FAF9D2C7-9081-42EB-931A-88D0DA211F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAF9D2C7-9081-42EB-931A-88D0DA211F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAF9D2C7-9081-42EB-931A-88D0DA211F0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA373590-60AC-4F71-BAEC-7291B834EC8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA373590-60AC-4F71-BAEC-7291B834EC8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA373590-60AC-4F71-BAEC-7291B834EC8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA373590-60AC-4F71-BAEC-7291B834EC8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7E755DD-C5A4-48E2-BC79-59598EEFE7DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7E755DD-C5A4-48E2-BC79-59598EEFE7DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7E755DD-C5A4-48E2-BC79-59598EEFE7DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7E755DD-C5A4-48E2-BC79-59598EEFE7DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
