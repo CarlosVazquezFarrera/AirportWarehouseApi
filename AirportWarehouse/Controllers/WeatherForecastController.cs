@@ -1,11 +1,13 @@
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirportWarehouse.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class WeatherForecastController : ControllerBase
     {
 
