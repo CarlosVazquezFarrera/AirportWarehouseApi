@@ -3,6 +3,6 @@
     public class AgentLogin
     {
         public int AgentNumber { get; set; }
-        public string Password { get; set; } = null!;
+        public string Password { get; set; } = string.Empty;
     }
 }

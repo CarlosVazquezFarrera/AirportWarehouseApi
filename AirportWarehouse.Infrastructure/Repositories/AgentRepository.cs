@@ -14,7 +14,17 @@ namespace AirportWarehouse.Infrastructure.Repositories
 
         public async Task<Agent?> Login(AgentLogin agent)
         {
-            return await _entitie.Where(a => a.Password.Equals(agent.Password) && a.AgentNumber.Equals(agent.AgentNumber)).FirstOrDefaultAsync();
+            return await _entitie
+                .Where(a => a.Password.Equals(agent.Password) && a.AgentNumber.Equals(agent.AgentNumber))
+                .Select(a=> new Agent() {
+                    Id = a.Id,
+                    Name = a.Name,
+                    ShortName = a.ShortName,
+                    LastName = a.LastName,
+                    AgentNumber = a.AgentNumber,
+                    Email = a.Email,
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }
