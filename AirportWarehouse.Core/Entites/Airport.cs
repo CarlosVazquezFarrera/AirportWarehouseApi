@@ -1,8 +1,7 @@
 ﻿namespace AirportWarehouse.Core.Entites
 { 
-    public partial class Airport
+    public partial class Airport : BaseEntity
     {
-        public Guid Id { get; set; }
 
         public string Name { get; set; } = null!;
 

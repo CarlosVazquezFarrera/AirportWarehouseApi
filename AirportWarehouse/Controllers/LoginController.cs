@@ -1,5 +1,6 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
 using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
@@ -26,14 +27,10 @@ namespace AirportWarehouse.Controllers
         [HttpPost]
         public async  Task<IActionResult> Login([FromBody] AgentLogin user)
         {
-            var agent = await this._agentRepository.Login(user);
-            if (agent == null)
-            {
-                return NotFound();
-            }
+            var agent = await this._agentRepository.Login(user) ?? throw new CredentialsException("Check your credentials");
             var agentInfo = new AgentInfo() {
                 Agent = _mapper.Map<AgentDTO>(agent),
-                Token = _jwt.GetJwtToken(agent.Name, agent.Email)
+                Token = _jwt.GetJwtToken(agent.Name, agent.Email, agent.Id)
             };
 
             return Ok(agentInfo);

@@ -90,6 +90,7 @@ builder.Services.AddScoped<IWeatherRepository, WeatherForecastRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
 builder.Services.AddScoped<IJwtBearer, JwtBearerHelper>();
 builder.Services.AddScoped<IAgentRepository, AgentRepository>();
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 
 var app = builder.Build();
 

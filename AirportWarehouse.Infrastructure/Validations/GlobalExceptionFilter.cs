@@ -18,14 +18,28 @@ namespace AirportWarehouse.Infrastructure.Validations
                     Tittle = "Bad Request",
                     Dedetails = exception.Message
                 };
-                var json = new
+                HandleException(context, validation, (int)HttpStatusCode.BadRequest);
+            }
+            if (context.Exception.GetType() == typeof(CredentialsException))
+            {
+                var exception = (CredentialsException)context.Exception;
+                var error = new
                 {
-                    erros = new[] { validation },
+                    Status = 460,
+                    Tittle = "Credential error",
+                    Dedetails = exception.Message
                 };
-                context.Result = new BadRequestObjectResult(json);
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.ExceptionHandled = true;
-             }
+                HandleException(context, error, 460);
+            }
+        }
+
+
+        public void HandleException(ExceptionContext context, object error, int statusCode)
+        {
+    
+            context.Result = new BadRequestObjectResult(error);
+            context.HttpContext.Response.StatusCode = statusCode;
+            context.ExceptionHandled = true;
         }
     }
 }
