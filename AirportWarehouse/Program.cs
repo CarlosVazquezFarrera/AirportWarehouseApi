@@ -29,7 +29,8 @@ builder.Services.AddCors(options =>
                       {
                           policy
                           .WithOrigins("http://localhost:4200",
-                          "https://airportwarehouse.vercel.app")
+                          "https://airportwarehouse.vercel.app",
+                          "http://127.0.0.1")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
