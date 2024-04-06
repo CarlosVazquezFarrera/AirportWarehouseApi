@@ -4,7 +4,6 @@ using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirportWarehouse.Controllers
@@ -28,8 +27,10 @@ namespace AirportWarehouse.Controllers
         public async  Task<IActionResult> Login([FromBody] AgentLogin user)
         {
             var agent = await this._agentRepository.Login(user) ?? throw new CredentialsException("Check your credentials");
+            var agentAdto = _mapper.Map<AgentDTO>(agent);
+            agentAdto.Id = Guid.Empty;
             var agentInfo = new AgentInfo() {
-                Agent = _mapper.Map<AgentDTO>(agent),
+                Agent = agentAdto,
                 Token = _jwt.GetJwtToken(agent.Name, agent.Email, agent.Id)
             };
 

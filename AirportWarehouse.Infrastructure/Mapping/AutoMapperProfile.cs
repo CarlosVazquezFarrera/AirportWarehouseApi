@@ -6,8 +6,9 @@ namespace AirportWarehouse.Infrastructure.Mapping
 {
     public class AutoMapperProfile : Profile
     {
-        public AutoMapperProfile() { 
-            CreateMap<Agent, AgentDTO>().ForMember(dest => dest.Id, opt => opt.MapFrom(src => (Guid?)null));
+        public AutoMapperProfile()
+        {
+            CreateMap<Agent, AgentDTO>().ReverseMap();
             CreateMap<Airport, AirportDTO>().ReverseMap();
             CreateMap<AgentDTO, Agent>();
             CreateMap<AgentPermission, AgentPermissionDTO>().ReverseMap();
