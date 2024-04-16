@@ -21,6 +21,7 @@ namespace AirportWarehouse.Infrastructure.Repositories
                          where ai.Id.Equals(IdAirport)
                          select new InventoryItem()
                          {
+                             Id = s.Id,
                              Name = p.Name,
                              SupplierPart = p.SupplierPart,
                              CurrentQuantity = s.CurrentQuantity,
