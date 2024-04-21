@@ -17,9 +17,9 @@ namespace AirportWarehouse.Controllers
         private readonly IInventoryRepository _inventoryRepository;
 
         [HttpGet]
-        public async Task<IActionResult> GetInventoryByAirpot([FromQuery]Guid Id)
+        public IActionResult GetInventoryByAirpot([FromQuery]Guid Id)
         {
-            var inventory = await _inventoryRepository.GetIventoryByAirport(Id);
+            var inventory = _inventoryRepository.GetIventoryByAirport(Id);
             return Ok(inventory);   
         }
     }

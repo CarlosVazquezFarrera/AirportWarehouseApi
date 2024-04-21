@@ -24,7 +24,7 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                 .HasConstraintName("FK_EgressApprover");
 
             builder.HasOne(d => d.ApproverNavigation).WithMany(p => p.Egresses)
-                .HasForeignKey(d => d.ApproverId)
+                .HasForeignKey(d => d.SupplyId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EgressSupply");
 

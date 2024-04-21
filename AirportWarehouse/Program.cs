@@ -88,9 +88,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IWeatherRepository, WeatherForecastRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IJwtBearer, JwtBearerHelper>();
 builder.Services.AddScoped<IAgentRepository, AgentRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IClaimService, ClaimService>();
+builder.Services.AddScoped<IEgressService, EgressService>();
 
 var app = builder.Build();
 

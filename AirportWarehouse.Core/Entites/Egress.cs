@@ -1,8 +1,7 @@
 ﻿namespace AirportWarehouse.Core.Entites
 {
-    public partial class Egress
+    public partial class Egress : BaseEntity
     {
-        public Guid Id { get; set; }
 
         public int AmountRemoved { get; set; }
 

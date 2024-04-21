@@ -9,9 +9,9 @@ namespace AirportWarehouse.Infrastructure.Validations
     {
         public void OnException(ExceptionContext context)
         {
-            if (context.Exception.GetType() == typeof(BussinesException))
+            if (context.Exception.GetType() == typeof(BusinessException))
             {
-                var exception = (BussinesException)context.Exception;
+                var exception = (BusinessException)context.Exception;
                 var validation = new
                 {
                     Status = 400,

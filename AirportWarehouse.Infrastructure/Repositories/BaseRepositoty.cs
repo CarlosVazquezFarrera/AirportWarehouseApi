@@ -24,26 +24,25 @@ namespace AirportWarehouse.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public IEnumerable<T> GetAll()
         {
-            return await _entitie.ToListAsync();
+            return _entitie.AsQueryable();
         }
 
-        public async Task<T?> GetById(Guid Id)
+        public async Task<T> GetById(Guid Id)
         {
-            return await _entitie.FindAsync(Id);
+            var entity = await _entitie.FindAsync(Id);
+            return entity!;
         }
 
         public async Task Add(T entity)
         {
-            _entitie.Add(entity);
-            await _context.SaveChangesAsync();
+            await _entitie.AddAsync(entity);
         }
 
-        public async Task Update(T entity)
+        public void Update(T entity)
         {
             _entitie.Update(entity);
-            await _context.SaveChangesAsync();
         }
     }
 }

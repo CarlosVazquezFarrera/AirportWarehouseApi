@@ -12,20 +12,20 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class AirportController : ControllerBase
     {
-        public AirportController(IRepository<Airport> repository, IMapper mapper)
+        public AirportController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        private readonly IRepository<Airport> _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IActionResult GetAll()
         {
-            var airports = await _repository.GetAll();
+            var airports = _unitOfWork.AirportRepository.GetAll();
             var airpotsDTO = _mapper.Map<IEnumerable<AirportDTO>>(airports);
             return Ok(airpotsDTO);
  

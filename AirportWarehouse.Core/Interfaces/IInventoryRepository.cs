@@ -4,6 +4,6 @@ namespace AirportWarehouse.Core.Interfaces
 {
     public interface IInventoryRepository 
     {
-        Task<IEnumerable<InventoryItem>> GetIventoryByAirport(Guid IdAirport);
+        IEnumerable<InventoryItem> GetIventoryByAirport(Guid IdAirport);
     }
 }

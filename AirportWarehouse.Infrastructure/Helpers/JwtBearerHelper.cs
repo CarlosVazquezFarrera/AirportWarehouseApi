@@ -31,7 +31,7 @@ namespace AirportWarehouse.Infrastructure.Helpers
             {
                 new(ClaimTypes.Name, Name),
                 new(ClaimTypes.Email, Email),
-                new(ClaimTypes.Actor, Id.ToString()),
+                new(ClaimTypes.NameIdentifier, Id.ToString()),
             };
             var payload = new JwtPayload (_jwtSetting.Value.Issuer, _jwtSetting.Value.Audience, claims, DateTime.Now, DateTime.UtcNow.AddHours(12));
             var token = new JwtSecurityToken(_jwtHeader, payload);

@@ -10,20 +10,20 @@ namespace AirportWarehouse.Controllers
     [ApiController]
     public class AgentController : ControllerBase
     {
-        public AgentController(IRepository<Agent> repository, IMapper mapper)
+        public AgentController(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _repository = repository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        private readonly IRepository<Agent> _repository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var agents = await _repository.GetAll();
+            var agents = _unitOfWork.AgentRepository.GetAll();
             var agentsDTO = _mapper.Map<IEnumerable<AgentDTO>>(agents);
             return Ok(agentsDTO);
         }

@@ -1,12 +1,12 @@
 ﻿namespace AirportWarehouse.Core.Exceptions
 {
-    public class BussinesException : Exception
+    public class BusinessException : Exception
     {
-        public BussinesException()
+        public BusinessException()
         {
             
         }
-        public BussinesException(string message): base(message)
+        public BusinessException(string message): base(message)
         {
             
         }
