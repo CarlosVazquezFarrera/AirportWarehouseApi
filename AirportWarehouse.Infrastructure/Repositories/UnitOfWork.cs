@@ -12,10 +12,10 @@ namespace AirportWarehouse.Infrastructure.Repositories
         }
 
         private readonly AirportwarehouseContext _context;
-        private IRepository<Egress> _egressRepository;
-        private IRepository<Supply> _supplyRepository;
-        private IRepository<Agent> _agentRepository;
-        private IRepository<Airport> _airportRepository;
+        private IRepository<Egress>? _egressRepository;
+        private IRepository<Supply>? _supplyRepository;
+        private IRepository<Agent>?  _agentRepository;
+        private IRepository<Airport>? _airportRepository;
 
 
         public IRepository<Egress> EgressRepository => _egressRepository ?? new BaseRepositoty<Egress>(_context);
