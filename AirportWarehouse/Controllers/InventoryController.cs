@@ -1,4 +1,5 @@
-﻿using AirportWarehouse.Core.Interfaces;
+﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,7 @@ namespace AirportWarehouse.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class InventoryController : ControllerBase
     {
         public InventoryController(IInventoryService inventoryService)
@@ -20,8 +21,8 @@ namespace AirportWarehouse.Controllers
         [HttpGet]
         public IActionResult GetInventoryByAirpot([FromQuery]InventoryParameters inventoryParameters)
         {
-            var inventory = _inventoryService.GetIventoryByAirport(inventoryParameters);
-            return Ok(inventory);   
+            PagedResponse<InventoryItem> inventory = _inventoryService.GetIventoryByAirport(inventoryParameters);
+             return Ok(inventory);   
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace AirportWarehouse.Core.QueryFilter
 {
-    public abstract class BaseParameter
+    public interface IFilterParameter
     {
         public string? Search { get; set; }
     }

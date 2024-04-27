@@ -1,4 +1,5 @@
 using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Core.Options;
 using AirportWarehouse.Infrastructure.Configuration;
 using AirportWarehouse.Infrastructure.Data;
 using AirportWarehouse.Infrastructure.Helpers;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -86,6 +88,8 @@ builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssembli
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.Configure<PaginationOptions>(builder.Configuration.GetSection("Pagination"));
+
 builder.Services.AddScoped<IWeatherRepository, WeatherForecastRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -95,6 +99,35 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<IEgressService, EgressService>();
+builder.Services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
+
+builder.Services.AddSwaggerGen(opt =>
+{
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "bearer"
+    });
+
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+});
 
 var app = builder.Build();
 
