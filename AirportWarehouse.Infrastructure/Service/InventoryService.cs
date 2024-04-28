@@ -28,9 +28,9 @@ namespace AirportWarehouse.Infrastructure.Service
             return pagedResponse;
         }
 
-        public async Task<InventoryItem> GetSuplyByIdAndAirport(Guid IdSupply, Guid IdAirport)
+        public async Task<InventoryItem> GetSuplyByIdAndAirport(Guid IdSupply)
         {
-            return await _inventoryRepository.GetSuplyByIdAndAirport(IdSupply, IdAirport);
+            return await _inventoryRepository.GetSuplyByIdAndAirport(IdSupply);
         }
     }
 }

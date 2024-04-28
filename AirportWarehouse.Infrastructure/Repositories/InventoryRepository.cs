@@ -30,12 +30,12 @@ namespace AirportWarehouse.Infrastructure.Repositories
             return (result);
         }
 
-        public async Task<InventoryItem> GetSuplyByIdAndAirport(Guid IdSupply, Guid IdAirport)
+        public async Task<InventoryItem> GetSuplyByIdAndAirport(Guid IdSupply)
         {
             var supply = await (from p in _context.Products
                           join s in _context.Supplies on p.Id equals s.ProductId
                           join ai in _context.Airports on s.AirportId equals ai.Id
-                          where ai.Id.Equals(IdAirport) && s.Id.Equals(IdSupply)
+                          where s.Id.Equals(IdSupply)
                           select new InventoryItem()
                           {
                               Id = s.Id,

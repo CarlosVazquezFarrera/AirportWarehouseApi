@@ -25,9 +25,9 @@ namespace AirportWarehouse.Controllers
              return Ok(inventory);   
         }
         [HttpGet("GetSuplyByIdAndAirport")]
-        public async Task<IActionResult> GetSuplyByIdAndAirport(Guid IdSupply, Guid IdAirport)
+        public async Task<IActionResult> GetSuplyByIdAndAirport(Guid IdSupply)
         {
-            InventoryItem item = await _inventoryService.GetSuplyByIdAndAirport(IdSupply, IdAirport);
+            InventoryItem item = await _inventoryService.GetSuplyByIdAndAirport(IdSupply);
             return Ok(item);
         }
     }
