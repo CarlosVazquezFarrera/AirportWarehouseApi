@@ -1,9 +1,7 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.ExtentionEntities;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using AirportWarehouse.Infrastructure.Interfaces;
-using System.Linq;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
@@ -28,6 +26,11 @@ namespace AirportWarehouse.Infrastructure.Service
             }
             var pagedResponse = _pagedListService.Paginate(inventoryItems, inventoryParameters.PageNumber, inventoryParameters.PageSize);
             return pagedResponse;
+        }
+
+        public async Task<InventoryItem> GetSuplyByIdAndAirport(Guid IdSupply, Guid IdAirport)
+        {
+            return await _inventoryRepository.GetSuplyByIdAndAirport(IdSupply, IdAirport);
         }
     }
 }
