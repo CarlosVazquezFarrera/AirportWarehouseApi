@@ -26,7 +26,7 @@ namespace AirportWarehouse.Infrastructure.Repositories
                              SupplierPart = p.SupplierPart,
                              CurrentQuantity = s.CurrentQuantity,
                              Airport = ai.Name
-                         }).AsQueryable();
+                         }).AsNoTracking().AsQueryable();
             return (result);
         }
 
