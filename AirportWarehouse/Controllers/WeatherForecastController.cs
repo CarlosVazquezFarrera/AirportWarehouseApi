@@ -7,7 +7,6 @@ namespace AirportWarehouse.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize]
     public class WeatherForecastController : ControllerBase
     {
 

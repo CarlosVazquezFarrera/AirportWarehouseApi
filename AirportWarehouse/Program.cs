@@ -1,3 +1,4 @@
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.Options;
 using AirportWarehouse.Infrastructure.Configuration;
@@ -8,11 +9,15 @@ using AirportWarehouse.Infrastructure.Repositories;
 using AirportWarehouse.Infrastructure.Service;
 using AirportWarehouse.Infrastructure.Validations;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System;
+using System.Globalization;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,8 +77,8 @@ builder.Services.AddDbContext<AirportwarehouseContext>(options =>
 {
     options.UseSqlServer(connectionString: @config.ConnectionString);
 });
-//Add services to the container.
 
+//Add services to the container.
 builder.Services
     .AddControllers(options => options.Filters.Add<GlobalExceptionFilter>())
     .AddNewtonsoftJson(options => {
@@ -81,8 +86,14 @@ builder.Services
         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
     });
 
+
 //Custom validations fluent
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+//builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -99,6 +110,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<IEgressService, EgressService>();
+builder.Services.AddScoped<IEntryService, EntryService>();
 builder.Services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
 
 builder.Services.AddSwaggerGen(opt =>

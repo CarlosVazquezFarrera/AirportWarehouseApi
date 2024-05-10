@@ -2,8 +2,9 @@
 
 namespace AirportWarehouse.Core.Interfaces
 {
-    public interface IEgressService
+    public interface IEntryService
     {
-        Task<Egress> Create(Egress egress);
+        Task<Entry> Create(Entry entry);
+
     }
 }

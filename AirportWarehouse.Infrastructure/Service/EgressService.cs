@@ -18,20 +18,19 @@ namespace AirportWarehouse.Infrastructure.Service
 
         public async Task<Egress> Create(Egress egress)
         {
-            var supply = await _unitOfWork.SupplyRepository.GetById(egress.SupplyId)!;
-            if (egress.AmountRemoved <= 0)
-            {
-                throw new BusinessException("Must be at least 1 item");
-            }
+            var supply = await _unitOfWork.SupplyRepository.GetById(egress.SupplyId);
+            if (supply == null)
+                throw new BusinessException("Supply was not found");
 
             if (egress.AmountRemoved > supply.CurrentQuantity)
-            {
                 throw new BusinessException("Insufficient stock");
-            }
-            egress.QuantityBefore = supply.CurrentQuantity;
+
             int newQuantity = supply.CurrentQuantity - egress.AmountRemoved;
+            
+            egress.QuantityBefore = supply.CurrentQuantity;
             egress.QuantityAfter = newQuantity;
             egress.ApproverId = IdUser;
+
             supply.CurrentQuantity = newQuantity;
             egress.ApproverNavigation = supply;
 
