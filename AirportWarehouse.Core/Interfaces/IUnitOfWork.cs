@@ -9,6 +9,9 @@ namespace AirportWarehouse.Core.Interfaces
         IRepository<Agent> AgentRepository { get; }
         IRepository<Airport> AirportRepository { get; }
         IRepository<Entry> EntryRepository { get; }
+        IRepository<Product> ProductRepository { get; }
+
+
 
         Task SaveChanguesAsync();
     }
