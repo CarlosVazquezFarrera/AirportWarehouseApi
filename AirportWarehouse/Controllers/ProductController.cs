@@ -42,5 +42,14 @@ namespace AirportWarehouse.Controllers
             var productDto = _mapper.Map<ProductDTO>(newProduct);
             return Ok(productDto);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] ProductDTO oldProductDto) {
+            var product = _mapper.Map<Product>(oldProductDto);
+            _unitOfWork.ProductRepository.Update(product);
+            await _unitOfWork.SaveChanguesAsync();
+            var productDto = _mapper.Map<ProductDTO>(product);
+            return Ok(productDto);
+        }
     }
 }
