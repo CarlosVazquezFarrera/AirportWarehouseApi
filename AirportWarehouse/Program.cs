@@ -1,4 +1,3 @@
-using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.Options;
 using AirportWarehouse.Infrastructure.Configuration;
@@ -11,13 +10,10 @@ using AirportWarehouse.Infrastructure.Validations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Globalization;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -111,6 +107,8 @@ builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<IEgressService, EgressService>();
 builder.Services.AddScoped<IEntryService, EntryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
 builder.Services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
 
 builder.Services.AddSwaggerGen(opt =>
