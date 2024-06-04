@@ -12,20 +12,29 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class SupplyController : ControllerBase
     {
-        public SupplyController(IRepository<Supply> supplyRepository, IMapper mapper)
+        public SupplyController(IUnitOfWork iUnitOfWork, IMapper mapper)
         {
-            _supplyRepository = supplyRepository;
+            _iUnitOfWork = iUnitOfWork;
             _mapper = mapper;
         }
 
-        private readonly IRepository<Supply> _supplyRepository;
+        IUnitOfWork _iUnitOfWork;
         private readonly IMapper _mapper;
         [HttpGet]
         public async Task<IActionResult> Get(Guid Id)
         {
-            var supply = await _supplyRepository.GetById(Id);
-            var supplDto = _mapper.Map<SupplyDTO>(supply);
-            return Ok(supplDto);
+            var supply = await _iUnitOfWork.SupplyRepository.GetById(Id);
+            var supplyDto = _mapper.Map<SupplyDTO>(supply);
+            return Ok(supplyDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(SupplyDTO supplyDTO)
+        {
+            var supply = _mapper.Map<Supply>(supplyDTO);
+            await _iUnitOfWork.SupplyRepository.Add(supply);
+            await _iUnitOfWork.SaveChanguesAsync();
+            return Ok(supply);
         }
     }
 }
