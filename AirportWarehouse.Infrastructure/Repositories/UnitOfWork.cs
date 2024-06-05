@@ -15,6 +15,8 @@ namespace AirportWarehouse.Infrastructure.Repositories
             _airportRepository = new BaseRepositoty<Airport>(_context);
             _entryRepository = new BaseRepositoty<Entry>(_context);
             _productRepository = new BaseRepositoty<Product>(_context);
+            _permissionRepository = new BaseRepositoty<Permission>(_context);
+            _agentPermissionRepository = new BaseRepositoty<AgentPermission>(_context);
         }
 
         private readonly AirportwarehouseContext _context;
@@ -24,6 +26,8 @@ namespace AirportWarehouse.Infrastructure.Repositories
         private readonly IRepository<Airport> _airportRepository;
         private readonly IRepository<Entry> _entryRepository;
         private readonly IRepository<Product> _productRepository;
+        private readonly IRepository<Permission> _permissionRepository;
+        private readonly IRepository<AgentPermission> _agentPermissionRepository;
 
 
         public IRepository<Egress> EgressRepository => _egressRepository ?? new BaseRepositoty<Egress>(_context);
@@ -32,6 +36,10 @@ namespace AirportWarehouse.Infrastructure.Repositories
         public IRepository<Airport> AirportRepository => _airportRepository ?? new BaseRepositoty<Airport>(_context);
         public IRepository<Entry> EntryRepository => _entryRepository ?? new BaseRepositoty<Entry>(_context);
         public IRepository<Product> ProductRepository => _productRepository ?? new BaseRepositoty<Product>(_context);
+
+        public IRepository<Permission> PermissionRepository => _permissionRepository ?? new BaseRepositoty<Permission>(_context);
+
+        public IRepository<AgentPermission> AgentPermissionRepository => _agentPermissionRepository ?? new BaseRepositoty<AgentPermission>(_context);
 
         public void Dispose()
         {

@@ -2,6 +2,7 @@
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace AirportWarehouse.Infrastructure.Repositories
 {
@@ -43,6 +44,23 @@ namespace AirportWarehouse.Infrastructure.Repositories
         public void Update(T entity)
         {
             _entitie.Update(entity);
+        }
+
+        public async Task<T?> GetByCondition(Expression<Func<T, bool>> predicate)
+        {
+            return await _entitie.FirstOrDefaultAsync(predicate);
+        }
+
+        public IQueryable<T> Include(params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _entitie;
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+
+            return query;
         }
     }
 }

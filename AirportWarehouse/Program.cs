@@ -1,10 +1,8 @@
-using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Config;
 using AirportWarehouse.Core.Options;
 using AirportWarehouse.Infrastructure.Configuration;
 using AirportWarehouse.Infrastructure.Data;
-using AirportWarehouse.Infrastructure.Helpers;
 using AirportWarehouse.Infrastructure.Interfaces;
-using AirportWarehouse.Infrastructure.Repositories;
 using AirportWarehouse.Infrastructure.Service;
 using AirportWarehouse.Infrastructure.Validations;
 using FluentValidation;
@@ -87,6 +85,9 @@ builder.Services
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
+
+//Servicios
+builder.Services.AddApplicationServices();
 //builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -97,17 +98,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<PaginationOptions>(builder.Configuration.GetSection("Pagination"));
 
-builder.Services.AddScoped<IWeatherRepository, WeatherForecastRepository>();
-builder.Services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<IJwtBearer, JwtBearerHelper>();
-builder.Services.AddScoped<IAgentRepository, AgentRepository>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
-builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
-builder.Services.AddScoped<IClaimService, ClaimService>();
-builder.Services.AddScoped<IEgressService, EgressService>();
-builder.Services.AddScoped<IEntryService, EntryService>();
-builder.Services.AddScoped<IProductService, ProductService>();
+
 
 builder.Services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
 

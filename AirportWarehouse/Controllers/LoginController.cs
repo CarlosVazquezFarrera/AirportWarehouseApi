@@ -24,7 +24,7 @@ namespace AirportWarehouse.Controllers
         private readonly IMapper _mapper;   
 
         [HttpPost]
-        public async  Task<IActionResult> Login([FromBody] AgentLogin user)
+        public async Task<IActionResult> Login([FromBody] AgentLogin user)
         {
             var agent = await this._agentRepository.Login(user) ?? throw new CredentialsException("Check your credentials");
             var agentAdto = _mapper.Map<AgentDTO>(agent);

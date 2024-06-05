@@ -1,30 +1,31 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
-using AirportWarehouse.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirportWarehouse.Infrastructure.Repositories
 {
-    public class AgentRepository : BaseRepositoty<Agent>, IAgentRepository
+    public class AgentRepository : IAgentRepository
     {
-        public AgentRepository(AirportwarehouseContext context) : base(context)
+        public AgentRepository(IUnitOfWork unitOfWork)
         {
+            _unitOfWork = unitOfWork;
         }
+        IUnitOfWork _unitOfWork;
 
-        public async Task<Agent?> Login(AgentLogin agent)
+        public async  Task<Agent?> Login(AgentLogin agent)
         {
-            return await _entitie
-                .Where(a => a.Password.Equals(agent.Password) && a.AgentNumber.Equals(agent.AgentNumber))
-                .Select(a=> new Agent() {
-                    Id = a.Id,
-                    Name = a.Name,
-                    ShortName = a.ShortName,
-                    LastName = a.LastName,
-                    AgentNumber = a.AgentNumber,
-                    Email = a.Email,
-                })
+            var adminpermition = await _unitOfWork.PermissionRepository.GetByCondition(p => p.Name.ToLower().Equals("admin"));
+
+            return await _unitOfWork.AgentRepository
+                .Include(a => a.AgentPermissions)
+                .Where(
+                    a => a.Password.Equals(agent.Password) 
+                    && a.AgentNumber.Equals(agent.AgentNumber) 
+                    && a.AgentPermissions.Any(p => p.PermissionId == adminpermition!.Id)
+                    )
                 .FirstOrDefaultAsync();
+
         }
     }
 }

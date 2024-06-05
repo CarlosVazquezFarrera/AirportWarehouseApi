@@ -1,8 +1,7 @@
 ﻿namespace AirportWarehouse.Core.Entites
 {
-    public partial class AgentPermission
+    public partial class AgentPermission : BaseEntity
     {
-        public Guid Id { get; set; }
 
         public Guid AgentId { get; set; }
 

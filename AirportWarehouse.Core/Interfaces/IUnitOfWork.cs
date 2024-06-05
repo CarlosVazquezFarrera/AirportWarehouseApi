@@ -10,6 +10,8 @@ namespace AirportWarehouse.Core.Interfaces
         IRepository<Airport> AirportRepository { get; }
         IRepository<Entry> EntryRepository { get; }
         IRepository<Product> ProductRepository { get; }
+        IRepository<Permission> PermissionRepository { get; }
+        IRepository<AgentPermission> AgentPermissionRepository { get; }
 
 
 
