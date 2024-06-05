@@ -1,15 +1,17 @@
 ﻿using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Core.Options;
 using AirportWarehouse.Infrastructure.Helpers;
 using AirportWarehouse.Infrastructure.Interfaces;
+using AirportWarehouse.Infrastructure.Options;
 using AirportWarehouse.Infrastructure.Repositories;
 using AirportWarehouse.Infrastructure.Service;
 
 namespace AirportWarehouse.Config
 {
 
-    public static class DepednencyConfig
+    public static class DependencyConfig
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IWeatherRepository, WeatherForecastRepository>();
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
@@ -22,6 +24,12 @@ namespace AirportWarehouse.Config
             services.AddScoped<IEgressService, EgressService>();
             services.AddScoped<IEntryService, EntryService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddSingleton<IPasswordService, PasswordService>();
+            services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
+
+            services.Configure<PaginationOptions>(configuration.GetSection("Pagination"));
+            services.Configure<PasswordOptions>(configuration.GetSection("PasswordOptions"));
+
             return services;
         }
     }

@@ -11,7 +11,8 @@ namespace AirportWarehouse.Infrastructure.Repositories
         {
             _unitOfWork = unitOfWork;
         }
-        IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+
 
         public async  Task<Agent?> Login(AgentLogin agent)
         {
@@ -20,8 +21,7 @@ namespace AirportWarehouse.Infrastructure.Repositories
             return await _unitOfWork.AgentRepository
                 .Include(a => a.AgentPermissions)
                 .Where(
-                    a => a.Password.Equals(agent.Password) 
-                    && a.AgentNumber.Equals(agent.AgentNumber) 
+                    a => a.AgentNumber.Equals(agent.AgentNumber) 
                     && a.AgentPermissions.Any(p => p.PermissionId == adminpermition!.Id)
                     )
                 .FirstOrDefaultAsync();

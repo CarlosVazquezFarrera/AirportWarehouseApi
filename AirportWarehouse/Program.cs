@@ -1,18 +1,10 @@
 using AirportWarehouse.Config;
-using AirportWarehouse.Core.Options;
-using AirportWarehouse.Infrastructure.Configuration;
 using AirportWarehouse.Infrastructure.Data;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AirportWarehouse.Infrastructure.Service;
 using AirportWarehouse.Infrastructure.Validations;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +29,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.AddSingleton<IConfig>(provider => {
@@ -47,25 +40,7 @@ builder.Services.AddSingleton<IConfig>(provider => {
     return config;
 });
 
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Authentication"));
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Authentication:Issuer"],
-        ValidAudience = builder.Configuration["Authentication:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config.SecretKey))
-    };
-});
+builder.Services.AddJWTConfig(builder.Configuration, config.SecretKey);
 
 builder.Services.AddDbContext<AirportwarehouseContext>(options =>
 {
@@ -80,60 +55,19 @@ builder.Services
         options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
     });
 
-
-//Custom validations fluent
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
-
-//Servicios
-builder.Services.AddApplicationServices();
-//builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+//Add services
+builder.Services.AddApplicationServices(builder.Configuration);
 
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//Add validations
+builder.Services.AddValidationConfig();
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<PaginationOptions>(builder.Configuration.GetSection("Pagination"));
-
-
-
-builder.Services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
-
-builder.Services.AddSwaggerGen(opt =>
-{
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
-
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-});
+//Add Swagger
+builder.Services.AddSwaggerConfig();
 
 var app = builder.Build();
-
-
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -4,7 +4,7 @@ namespace AirportWarehouse.Core.CustomEntities
 {
     public class AgentInfo
     {
-        public AgentDTO Agent { get; set; } = new AgentDTO();
+        public LoginAgent Agent { get; set; } = new LoginAgent();
         public string Token { get; set; } = string.Empty;
     }
 }

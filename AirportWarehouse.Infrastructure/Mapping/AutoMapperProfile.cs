@@ -1,4 +1,5 @@
-﻿using AirportWarehouse.Core.DTOs;
+﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AutoMapper;
 
@@ -9,6 +10,7 @@ namespace AirportWarehouse.Infrastructure.Mapping
         public AutoMapperProfile()
         {
             CreateMap<Agent, AgentDTO>().ReverseMap();
+            CreateMap<Agent, LoginAgent>().ReverseMap();
             CreateMap<Airport, AirportDTO>().ReverseMap();
             CreateMap<AgentDTO, Agent>();
             CreateMap<AgentPermission, AgentPermissionDTO>().ReverseMap();
