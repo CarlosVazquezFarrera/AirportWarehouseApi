@@ -1,31 +1,39 @@
-﻿using AirportWarehouse.Core.DTOs;
-using AirportWarehouse.Core.Entites;
+﻿using AirportWarehouse.Core.CustomEntities;
 using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Core.QueryFilter;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirportWarehouse.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AgentController : ControllerBase
     {
-        public AgentController(IUnitOfWork unitOfWork, IMapper mapper)
+        public AgentController(IAgentService agentService, IMapper mapper)
         {
-            _unitOfWork = unitOfWork;
+            _agentService = agentService;
             _mapper = mapper;
         }
 
         private readonly IMapper _mapper;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAgentService _agentService;
 
 
         [HttpGet]
         public IActionResult Get()
         {
-            var agents = _unitOfWork.AgentRepository.GetAll();
-            var agentsDTO = _mapper.Map<IEnumerable<AgentDTO>>(agents);
-            return Ok(agentsDTO);
+            var agents = _agentService.GetAll();
+            return Ok(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents));
+        }
+
+        [HttpGet("GetPagedAgents")]
+        public IActionResult GetPagedAgents([FromQuery] AgentParameters agentParameters)
+        {
+            var agents = _agentService.GetPagedAgents(agentParameters);
+            return Ok(agents);
         }
     }
 }

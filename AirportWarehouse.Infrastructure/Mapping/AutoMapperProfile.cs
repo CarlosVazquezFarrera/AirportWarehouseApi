@@ -10,7 +10,7 @@ namespace AirportWarehouse.Infrastructure.Mapping
         public AutoMapperProfile()
         {
             CreateMap<Agent, AgentDTO>().ReverseMap();
-            CreateMap<Agent, LoginAgent>().ReverseMap();
+            CreateMap<Agent, AgentBaseInfo>().ReverseMap();
             CreateMap<Airport, AirportDTO>().ReverseMap();
             CreateMap<AgentDTO, Agent>();
             CreateMap<AgentPermission, AgentPermissionDTO>().ReverseMap();

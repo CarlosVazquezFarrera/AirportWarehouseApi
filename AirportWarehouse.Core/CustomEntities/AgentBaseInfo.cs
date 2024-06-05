@@ -1,7 +1,8 @@
 ﻿namespace AirportWarehouse.Core.CustomEntities
 {
-    public class LoginAgent
+    public class AgentBaseInfo
     {
+        public Guid Id { get; set; }
 
         public int AgentNumber { get; set; }
 

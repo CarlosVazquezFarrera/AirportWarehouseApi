@@ -3,7 +3,7 @@ using AirportWarehouse.Core.Entites;
 
 namespace AirportWarehouse.Core.Interfaces
 {
-    public interface IAgentRepository 
+    public interface ILoginService 
     {
         Task<Agent?> Login(AgentLogin agent);
     }

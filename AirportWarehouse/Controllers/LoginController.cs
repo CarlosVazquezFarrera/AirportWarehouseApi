@@ -1,5 +1,4 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
@@ -13,7 +12,7 @@ namespace AirportWarehouse.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        public LoginController(IJwtBearer jwt, IAgentRepository agentRepository, IMapper mapper, IPasswordService passwordService)
+        public LoginController(IJwtBearer jwt, ILoginService agentRepository, IMapper mapper, IPasswordService passwordService)
         {
             _agentRepository = agentRepository;
             _jwt = jwt;
@@ -22,7 +21,7 @@ namespace AirportWarehouse.Controllers
         }
 
         private readonly IJwtBearer _jwt;
-        private readonly IAgentRepository _agentRepository;
+        private readonly ILoginService _agentRepository;
         private readonly IMapper _mapper;
         private readonly IPasswordService _passwordService;
 
@@ -33,7 +32,7 @@ namespace AirportWarehouse.Controllers
 
             if(!_passwordService.Check(agentAdmin.Password, user.Password))
                 throw new CredentialsException("Check your credentials");
-            var loginaAgent = _mapper.Map<LoginAgent>(agentAdmin);
+            var loginaAgent = _mapper.Map<AgentBaseInfo>(agentAdmin);
 
             var agentInfo = new AgentInfo() {
                 Agent = loginaAgent,

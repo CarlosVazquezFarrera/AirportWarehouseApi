@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AirportWarehouse.Infrastructure.Repositories
 {
-    public class AgentRepository : IAgentRepository
+    public class AgentRepository : ILoginService
     {
         public AgentRepository(IUnitOfWork unitOfWork)
         {
