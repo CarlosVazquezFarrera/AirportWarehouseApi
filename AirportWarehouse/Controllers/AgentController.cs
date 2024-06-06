@@ -44,5 +44,6 @@ namespace AirportWarehouse.Controllers
             return Ok(_mapper.Map<AgentBaseInfo>(agent));
         }
 
+
     }
 }
