@@ -4,7 +4,7 @@
     {
         public Guid Id { get; set; }
 
-        public int AgentNumber { get; set; }
+        public string AgentNumber { get; set; } = null!;
 
         public string ShortName { get; set; } = null!;
 

@@ -7,7 +7,7 @@ namespace AirportWarehouse.Infrastructure.Validations
     {
         public EntryValidator()
         {
-            RuleFor(entry => entry.QuantityIncoming).GreaterThan(0);
+            RuleFor(entry => entry.QuantityIncoming).NotEmpty().GreaterThan(0);
         }
     }
 }

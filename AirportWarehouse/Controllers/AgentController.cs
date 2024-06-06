@@ -1,4 +1,6 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using AutoMapper;
@@ -25,15 +27,22 @@ namespace AirportWarehouse.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var agents = _agentService.GetAll();
+            IEnumerable<Agent> agents = _agentService.GetAll();
             return Ok(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents));
         }
 
         [HttpGet("GetPagedAgents")]
         public IActionResult GetPagedAgents([FromQuery] AgentParameters agentParameters)
         {
-            var agents = _agentService.GetPagedAgents(agentParameters);
+            PagedResponse<AgentBaseInfo> agents = _agentService.GetPagedAgents(agentParameters);
             return Ok(agents);
         }
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] AgentDTO agentDTO)
+        {
+            var agent = await _agentService.Register(_mapper.Map<Agent>(agentDTO));
+            return Ok(_mapper.Map<AgentBaseInfo>(agent));
+        }
+
     }
 }

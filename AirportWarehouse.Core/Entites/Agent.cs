@@ -3,7 +3,7 @@
     public partial class Agent : BaseEntity
     {
 
-        public int AgentNumber { get; set; }
+        public string AgentNumber { get; set; } = null!;
 
         public string ShortName { get; set; } = null!;
 

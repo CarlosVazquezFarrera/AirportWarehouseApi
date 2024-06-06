@@ -8,5 +8,7 @@ namespace AirportWarehouse.Core.Interfaces
     {
         PagedResponse<AgentBaseInfo> GetPagedAgents(AgentParameters inventoryParameters);
         IEnumerable<Agent> GetAll();
+
+        Task<Agent> Register(Agent agent);
     }
 }
