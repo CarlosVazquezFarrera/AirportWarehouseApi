@@ -10,5 +10,7 @@ namespace AirportWarehouse.Core.Interfaces
         IEnumerable<Agent> GetAll();
 
         Task<Agent> Register(Agent agent);
+        Task<Agent> Update(Agent agent);
+
     }
 }

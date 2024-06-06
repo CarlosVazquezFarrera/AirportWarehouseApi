@@ -43,7 +43,11 @@ namespace AirportWarehouse.Controllers
             var agent = await _agentService.Register(_mapper.Map<Agent>(agentDTO));
             return Ok(_mapper.Map<AgentBaseInfo>(agent));
         }
-
-
+        [HttpPut]
+        public async Task<IActionResult> Update([FromBody] AgentDTO agentDTO)
+        {
+            var agent = await _agentService.Update(_mapper.Map<Agent>(agentDTO)); 
+            return Ok(_mapper.Map<AgentBaseInfo>(agent));
+        }
     }
 }

@@ -44,5 +44,12 @@ namespace AirportWarehouse.Infrastructure.Service
             return agent;
 
         }
+
+        public async Task<Agent> Update(Agent agent)
+        {
+            _unitOfWork.AgentRepository.Update(agent);
+            await _unitOfWork.SaveChanguesAsync();
+            return agent;
+        }
     }
 }
