@@ -16,14 +16,12 @@ namespace AirportWarehouse.Infrastructure.Repositories
 
         public async  Task<Agent?> Login(AgentLogin agent)
         {
-            var adminpermition = await _unitOfWork.PermissionRepository.GetByCondition(p => p.Name.ToLower().Equals("admin"));
 
             return await _unitOfWork.AgentRepository
                 .Include(a => a.AgentPermissions)
                 .Where(
                     a => a.AgentNumber.Equals(agent.AgentNumber) 
-                    && a.AgentPermissions.Any(p => p.PermissionId == adminpermition!.Id)
-                    )
+                    && a.AgentPermissions.Any())
                 .FirstOrDefaultAsync();
 
         }
