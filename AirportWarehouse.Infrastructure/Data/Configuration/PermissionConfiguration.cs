@@ -8,12 +8,16 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Permission> builder)
         {
-            builder.HasKey(e => e.Id).HasName("PK__Permissi__3214EC07211C4D86");
+            builder.HasKey(e => e.Id).HasName("PK_Permission_Id");
 
             builder.ToTable("Permission");
 
-            builder.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            builder.Property(e => e.Name).IsUnicode(false);
+            builder.Property(e => e.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
+            builder.Property(e => e.Name)
+                .IsUnicode(false);
         }
     }
+
 }

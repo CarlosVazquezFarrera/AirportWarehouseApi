@@ -16,9 +16,7 @@ namespace AirportWarehouse.Config
             
                 string? SecretKey = Environment.GetEnvironmentVariable("SecretKey");
 
-                string? ConnectionString = Environment.GetEnvironmentVariable("ConnectionString");
-
-                string Connection = ConnectionString ?? configuration.GetConnectionString("DefaultConnection")!;
+                string Connection = Environment.GetEnvironmentVariable("ConnectionString") ?? configuration.GetConnectionString("DefaultConnection")!;
 
                 return new ConfigSettings(
                     Connection,

@@ -8,21 +8,25 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<AgentPermission> builder)
         {
-            builder.HasKey(e => e.Id).HasName("PK__AgentPer__3214EC0741F713B0");
+            builder.HasKey(e => e.Id).HasName("PK_AgentPermission_Id");
 
             builder.ToTable("AgentPermission");
 
-            builder.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            builder.Property(e => e.Id)
+                .HasDefaultValueSql("uuid_generate_v4()"); 
 
-            builder.HasOne(d => d.Agent).WithMany(p => p.AgentPermissions)
+            builder.HasOne(d => d.Agent)
+                .WithMany(p => p.AgentPermissions)
                 .HasForeignKey(d => d.AgentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_AgentHasPermissions");
 
-            builder.HasOne(d => d.Permission).WithMany(p => p.AgentPermissions)
+            builder.HasOne(d => d.Permission)
+                .WithMany(p => p.AgentPermissions)
                 .HasForeignKey(d => d.PermissionId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PermissionOwnsAgent");
         }
     }
+
 }

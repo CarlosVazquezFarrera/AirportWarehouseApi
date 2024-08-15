@@ -15,8 +15,8 @@ namespace AirportWarehouse.Infrastructure.Service
 
         public IEnumerable<Product> GetProductsMissingInAirport(Guid idAirport)
         {
-            var products = _unitOfWork.ProductRepository.GetAll();
-            var supplies = _unitOfWork.SupplyRepository.GetAll();
+            var products = _unitOfWork.ProductRepository.GetAll().AsQueryable();
+            var supplies = _unitOfWork.SupplyRepository.GetAll().AsQueryable();
             var result = (from p in products
                           join s in supplies.Where(s => s.AirportId == idAirport)
                           on p.Id equals s.ProductId into ps

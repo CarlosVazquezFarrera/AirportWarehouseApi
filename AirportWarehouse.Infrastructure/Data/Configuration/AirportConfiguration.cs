@@ -8,12 +8,16 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Airport> builder)
         {
-            builder.HasKey(e => e.Id).HasName("PK__Airport__3214EC07AE2EBFDF");
+            builder.HasKey(e => e.Id).HasName("PK_Airport_Id");
 
             builder.ToTable("Airport");
 
-            builder.Property(e => e.Id).HasDefaultValueSql("(newid())");
-            builder.Property(e => e.Name).IsUnicode(false);
+            builder.Property(e => e.Id)
+                .HasDefaultValueSql("uuid_generate_v4()");
+
+            builder.Property(e => e.Name)
+                .IsUnicode(false);
         }
     }
+
 }

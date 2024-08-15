@@ -12,7 +12,9 @@ namespace AirportWarehouse.Config
 
             services.AddDbContext<AirportwarehouseContext>(options =>
             {
-                options.UseSqlServer(connectionString: configSettings.ConnectionString);
+                //options.UseNpgsql(connectionString: configSettings.ConnectionString);
+                var conexion = "Host=viaduct.proxy.rlwy.net; Port=50490; Database=airportwarehouse_; Username=postgres; Password=tGyCmtNzbiXFcsLpDmYPAnpOAIqJIExA; Pooling=true;";
+                options.UseNpgsql(conexion);
             });
             return services;
         }
