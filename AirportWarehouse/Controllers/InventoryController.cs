@@ -3,6 +3,7 @@ using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace AirportWarehouse.Controllers
 {
@@ -28,6 +29,7 @@ namespace AirportWarehouse.Controllers
         public async Task<IActionResult> GetSuplyByIdAndAirport(Guid IdSupply)
         {
             InventoryItem item = await _inventoryService.GetSuplyByIdAndAirport(IdSupply);
+            
             return Ok(item);
         }
     }

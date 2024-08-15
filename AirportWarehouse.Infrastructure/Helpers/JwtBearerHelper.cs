@@ -1,5 +1,6 @@
 ﻿using AirportWarehouse.Infrastructure.Configuration;
 using AirportWarehouse.Infrastructure.Interfaces;
+using AirportWarehouse.Infrastructure.Service;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,15 +11,13 @@ namespace AirportWarehouse.Infrastructure.Helpers
 {
     public class JwtBearerHelper : IJwtBearer
     {
-        public JwtBearerHelper(IConfig config, IOptions<JwtSettings> jwtSetting)
+        public JwtBearerHelper(IOptions<JwtSettings> jwtSetting, ConfigSettings settings)
         {
-            _config = config;
-            _symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.SecretKey));
+            _symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(settings.SecretKey));
             _signingCredentials = new SigningCredentials(_symmetricSecurityKey, SecurityAlgorithms.HmacSha256);;
             _jwtHeader = new JwtHeader(_signingCredentials);
             _jwtSetting = jwtSetting;
         }
-        private readonly IConfig _config;
         private readonly IOptions<JwtSettings> _jwtSetting;
         private readonly SymmetricSecurityKey _symmetricSecurityKey;
         private readonly SigningCredentials _signingCredentials;

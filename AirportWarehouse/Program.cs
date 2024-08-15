@@ -1,18 +1,13 @@
 using AirportWarehouse.Config;
-using AirportWarehouse.Infrastructure.Data;
-using AirportWarehouse.Infrastructure.Interfaces;
-using AirportWarehouse.Infrastructure.Service;
 using AirportWarehouse.Infrastructure.Validations;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-var SecretKey = Environment.GetEnvironmentVariable("SecretKey");
-var ConnectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
-var config = new Config(ConnectionString, SecretKey);
+
+builder.Services.AddConfigSettings(builder.Configuration);
 
 
 builder.Services.AddCors(options =>
@@ -30,22 +25,11 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-builder.Services.AddSingleton<IConfig>(provider => {
-    var accesor = provider.GetRequiredService<IHttpContextAccessor>();
-    var request = accesor.HttpContext!.Request;
-    var absoluteUri = $"{request.Scheme}://{request.Host.ToUriComponent()}";
-    config.ApiUrl = absoluteUri;
-    return config;
-});
+builder.Services.AddJWTConfig(builder.Configuration);
 
-builder.Services.AddJWTConfig(builder.Configuration, config.SecretKey);
+builder.Services.AddDatabaseContext();
 
-builder.Services.AddDbContext<AirportwarehouseContext>(options =>
-{
-    options.UseSqlServer(connectionString: @config.ConnectionString);
-});
 
 //Add services to the container.
 builder.Services
