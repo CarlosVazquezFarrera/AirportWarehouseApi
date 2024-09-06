@@ -7,7 +7,7 @@ namespace AirportWarehouse.Core.CustomEntities
         public PagedResponse(IEnumerable<T> items, int pageNumber, int pageSize)
         {
             Data = new PagedList<T>(items, pageNumber, pageSize);
-            Metadata = new Metadata<T>(Data);
+            Metadata = new Metadata<T>(Data, items.Count());
         }
 
         public PagedList<T> Data { get; set; }

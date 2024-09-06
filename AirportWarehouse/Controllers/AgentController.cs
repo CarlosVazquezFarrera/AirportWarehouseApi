@@ -1,6 +1,5 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
 using AirportWarehouse.Core.DTOs;
-using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using AutoMapper;
@@ -27,27 +26,29 @@ namespace AirportWarehouse.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            IEnumerable<Agent> agents = _agentService.GetAll();
-            return Ok(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents));
+            return Ok(_agentService.GetAll());
         }
 
         [HttpGet("GetPagedAgents")]
         public IActionResult GetPagedAgents([FromQuery] AgentParameters agentParameters)
         {
-            PagedResponse<AgentBaseInfo> agents = _agentService.GetPagedAgents(agentParameters);
-            return Ok(agents);
+            return Ok(_agentService.GetPagedAgents(agentParameters));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AgentDTO agentDTO)
         {
-            var agent = await _agentService.Register(_mapper.Map<Agent>(agentDTO));
-            return Ok(_mapper.Map<AgentBaseInfo>(agent));
+            return Ok(await _agentService.Register(agentDTO));
         }
         [HttpPut]
         public async Task<IActionResult> Update([FromBody] AgentDTO agentDTO)
         {
-            var agent = await _agentService.Update(_mapper.Map<Agent>(agentDTO)); 
-            return Ok(_mapper.Map<AgentBaseInfo>(agent));
+            return Ok(await _agentService.Update(agentDTO));
+        }
+
+        [HttpPatch("SetPassword")]
+        public async Task<IActionResult> SetPassword([FromBody] AgentPasswordInfo passwordInfo)
+        {
+            return Ok(await _agentService.SetPassword(passwordInfo));
         }
     }
 }

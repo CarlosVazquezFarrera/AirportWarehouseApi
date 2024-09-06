@@ -1,6 +1,7 @@
 ﻿using AirportWarehouse.Core.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 using System.Net;
 
 namespace AirportWarehouse.Infrastructure.Validations
@@ -12,34 +13,40 @@ namespace AirportWarehouse.Infrastructure.Validations
             if (context.Exception.GetType() == typeof(BusinessException))
             {
                 var exception = (BusinessException)context.Exception;
-                var validation = new
-                {
-                    Status = 400,
-                    Tittle = "Bad Request",
-                    Dedetails = exception.Message
-                };
-                HandleException(context, validation, (int)HttpStatusCode.BadRequest);
+                var validation = GenerateError((int)HttpStatusCode.BadRequest, "Bad Request");
+                HandleException(context, validation);
             }
-            if (context.Exception.GetType() == typeof(CredentialsException))
+            else if (context.Exception.GetType() == typeof(CredentialsException))
             {
                 var exception = (CredentialsException)context.Exception;
-                var error = new
-                {
-                    Status = 460,
-                    Tittle = "Credential error",
-                    Dedetails = exception.Message
-                };
-                HandleException(context, error, 460);
+                var error = GenerateError(460, "Credential error");
+                HandleException(context, error);
+            }
+            else if (context.Exception.GetType() == typeof(NotFoundException))
+            {
+                var exception = (NotFoundException)context.Exception;
+                var error = GenerateError((int)HttpStatusCode.NotFound, "The resource was not found");
+                HandleException(context, error);
             }
         }
 
 
-        public void HandleException(ExceptionContext context, object error, int statusCode)
+        public void HandleException(ExceptionContext context, object error)
         {
-    
+            var statusObject = error.GetType().GetProperty("Status")?.GetValue(error, null);
+            int status = Convert.ToInt32(statusObject);
             context.Result = new BadRequestObjectResult(error);
-            context.HttpContext.Response.StatusCode = statusCode;
+            context.HttpContext.Response.StatusCode = status;
             context.ExceptionHandled = true;
+        }
+
+        private object GenerateError(int status, string tittle)
+        {
+            return new
+            {
+                Status = status,
+                Tittle = tittle,
+            };
         }
     }
 }

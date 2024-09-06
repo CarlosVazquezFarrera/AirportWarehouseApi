@@ -1,6 +1,5 @@
 using AirportWarehouse.Config;
 using AirportWarehouse.Infrastructure.Validations;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

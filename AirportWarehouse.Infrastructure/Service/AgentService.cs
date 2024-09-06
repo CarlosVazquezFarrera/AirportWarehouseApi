@@ -1,55 +1,67 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
 using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
+using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
+using AirportWarehouse.Infrastructure.Helpers;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class AgentService : IAgentService
+    public class AgentService(IUnitOfWork unitOfWork, IPagedListService<AgentBaseInfo> pagedListService, IMapper mapper) : IAgentService
     {
-        public AgentService(IUnitOfWork unitOfWork, IPagedListService<AgentBaseInfo> pagedListService, IMapper mapper)
+        public IEnumerable<AgentBaseInfo> GetAll()
         {
-            _unitOfWork = unitOfWork;
-            _pagedListService = pagedListService;
-            _mapper = mapper;
-        }
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-        private readonly IPagedListService<AgentBaseInfo> _pagedListService;
-        public IEnumerable<Agent> GetAll()
-        {
-            return _unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
+            var agents = unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
+            return mapper.Map<IEnumerable<AgentBaseInfo>>(agents);
         }
 
         public PagedResponse<AgentBaseInfo> GetPagedAgents(AgentParameters agentParameters)
         {
-            var agents = GetAll();
+            var agents = unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
             if (!String.IsNullOrEmpty(agentParameters.Search))
             {
                 agents = agents.Where(a => a.Name.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase)
                 || a.AgentNumber.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase));
 
             }
-            var pagedResponse = _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
+            var pagedResponse = pagedListService.Paginate(mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
             return pagedResponse;
         }
 
-        public async Task<Agent> Register(Agent agent)
+        public async Task<AgentBaseInfo> Register(AgentDTO agentDTO)
         {
-            await _unitOfWork.AgentRepository.Add(agent);
-            await _unitOfWork.SaveChanguesAsync();
-            return agent;
-
+            var agent = mapper.Map<Agent>(agentDTO);
+            await unitOfWork.AgentRepository.Add(agent);
+            await unitOfWork.SaveChanguesAsync();
+            return mapper.Map<AgentBaseInfo>(agent);
         }
 
-        public async Task<Agent> Update(Agent agent)
+        public async Task<AgentBaseInfo> Update(AgentDTO agentDTO)
         {
-            _unitOfWork.AgentRepository.Update(agent);
-            await _unitOfWork.SaveChanguesAsync();
-            return agent;
+            var agent = mapper.Map<Agent>(agentDTO);
+            unitOfWork.AgentRepository.Update(agent);
+            await unitOfWork.SaveChanguesAsync();
+            return mapper.Map<AgentBaseInfo>(agent);
+        }
+
+        public async Task<bool> SetPassword(AgentPasswordInfo passwordInfo)
+        {
+            var agent = await unitOfWork.AgentRepository.GetById(passwordInfo.Id) ?? throw new NotFoundException();
+            try
+            {
+    
+                agent.Password = HashHelper.Hash(passwordInfo.Password);
+                unitOfWork.AgentRepository.Update(agent);
+                await unitOfWork.SaveChanguesAsync();
+                return true;
+            }
+            catch 
+            {
+                return false;
+            }
         }
     }
 }

@@ -4,9 +4,9 @@ namespace AirportWarehouse.Core.CustomEntities
 {
     public class Metadata<T>
     {
-        public Metadata(PagedList<T> items)
+        public Metadata(PagedList<T> items, int count)
         {
-            TotalCount = items.Count;
+            TotalCount = count;
             PageSize = items.PageSize;
             CurrentPage = items.CurrentPage;
         }

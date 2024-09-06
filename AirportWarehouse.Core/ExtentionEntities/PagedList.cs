@@ -1,6 +1,4 @@
-﻿using AirportWarehouse.Core.CustomEntities;
-
-namespace AirportWarehouse.Core.ExtentionEntities
+﻿namespace AirportWarehouse.Core.ExtentionEntities
 {
     public class PagedList<T> : List<T>
     {

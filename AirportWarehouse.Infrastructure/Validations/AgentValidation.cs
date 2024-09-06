@@ -9,8 +9,7 @@ namespace AirportWarehouse.Infrastructure.Validations
         {
             RuleFor(airpot => airpot.AgentNumber)
                .NotNull()
-               .NotEmpty()
-               .MinimumLength(6);
+               .NotEmpty();
 
             RuleFor(airpot => airpot.ShortName)
                .NotNull()
