@@ -72,5 +72,17 @@ namespace AirportWarehouse.Infrastructure.Service
         {
             return unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
         }
+
+        public PagedResponse<AgentBaseInfo> GetActiveAgentsPaged(BasePagedParameter agentParameters)
+        {
+            var agents = GetAgentsWithoutAdmin().Where(agent => agent.IsActive);
+            return _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
+        }
+
+        public PagedResponse<AgentBaseInfo> GetInactiveAgentsPaged(BasePagedParameter agentParameters)
+        {
+            var agents = GetAgentsWithoutAdmin().Where(agent => !agent.IsActive);
+            return _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
+        }
     }
 }

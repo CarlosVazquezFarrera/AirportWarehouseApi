@@ -2,7 +2,6 @@
 using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,13 +12,11 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class AgentController : ControllerBase
     {
-        public AgentController(IAgentService agentService, IMapper mapper)
+        public AgentController(IAgentService agentService)
         {
             _agentService = agentService;
-            _mapper = mapper;
         }
 
-        private readonly IMapper _mapper;
         private readonly IAgentService _agentService;
 
 
@@ -33,6 +30,16 @@ namespace AirportWarehouse.Controllers
         public IActionResult GetPagedAgents([FromQuery] AgentParameters agentParameters)
         {
             return Ok(_agentService.GetPagedAgents(agentParameters));
+        }
+        [HttpGet("GetActiveAgentsPaged")]
+        public IActionResult GetActiveAgentsPaged([FromQuery] BasePagedParameter agentParameters)
+        {
+            return Ok(_agentService.GetActiveAgentsPaged(agentParameters));
+        }
+        [HttpGet("GetInactiveAgentsPaged")]
+        public IActionResult GetInactiveAgentsPaged([FromQuery] BasePagedParameter agentParameters)
+        {
+            return Ok(_agentService.GetInactiveAgentsPaged(agentParameters));
         }
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] AgentDTO agentDTO)
