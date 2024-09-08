@@ -13,7 +13,9 @@
 
         public string Email { get; set; } = null!;
 
-        public string Password { get; set; } = null!;
+        public string Password { get; set; } = string.Empty;
+
+        public bool IsActive { get; set; }
 
         public virtual ICollection<AgentPermission> AgentPermissions { get; set; } = new List<AgentPermission>();
 

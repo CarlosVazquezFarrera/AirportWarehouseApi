@@ -1,6 +1,5 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.Entites;
-using AirportWarehouse.Core.Exceptions;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
@@ -28,15 +27,15 @@ namespace AirportWarehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] AgentLogin user)
         {
-            Agent agentAdmin = await this._agentRepository.Login(user) ?? throw new CredentialsException("Check your credentials");
+            AgentDTO exitingAgent = await this._agentRepository.Login(user);
 
-            if(!_passwordService.Check(agentAdmin.Password, user.Password))
-                throw new CredentialsException("Check your credentials");
-            var loginaAgent = _mapper.Map<AgentBaseInfo>(agentAdmin);
+            _passwordService.Check(exitingAgent.Password, user.Password);
+
+            var loginaAgent = _mapper.Map<AgentBaseInfo>(exitingAgent);
 
             var agentInfo = new AgentInfo() {
                 Agent = loginaAgent,
-                Token = _jwt.GetJwtToken(agentAdmin.Name, agentAdmin.Email, agentAdmin.Id)
+                Token = _jwt.GetJwtToken(exitingAgent.Name, exitingAgent.Email, exitingAgent.Id)
             };
 
             return Ok(agentInfo);

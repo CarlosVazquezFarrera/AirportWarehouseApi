@@ -17,7 +17,7 @@ namespace AirportWarehouse.Config
             services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IJwtBearer, JwtBearerHelper>();
-            services.AddScoped<ILoginService, AgentRepository>();
+            services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IInventoryRepository, InventoryRepository>();
             services.AddScoped<IClaimService, ClaimService>();

@@ -4,18 +4,20 @@ using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
-using AirportWarehouse.Infrastructure.Helpers;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class AgentService(IUnitOfWork unitOfWork, IPagedListService<AgentBaseInfo> pagedListService, IMapper mapper) : IAgentService
+    public class AgentService(IUnitOfWork unitOfWork, 
+        IPagedListService<AgentBaseInfo> _pagedListService, 
+        IMapper _mapper,
+        IPasswordService _passwordService) : IAgentService
     {
         public IEnumerable<AgentBaseInfo> GetAll()
         {
             var agents = GetAgentsWithoutAdmin();
-            return mapper.Map<IEnumerable<AgentBaseInfo>>(agents);
+            return _mapper.Map<IEnumerable<AgentBaseInfo>>(agents);
         }
 
         public PagedResponse<AgentBaseInfo> GetPagedAgents(AgentParameters agentParameters)
@@ -27,25 +29,26 @@ namespace AirportWarehouse.Infrastructure.Service
                 || a.AgentNumber.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase));
 
             }
-            var pagedResponse = pagedListService.Paginate(mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
+            var pagedResponse = _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
             return pagedResponse;
         }
 
         public async Task<AgentBaseInfo> Register(AgentDTO agentDTO)
         {
-            var agent = mapper.Map<Agent>(agentDTO);
+            var agent = _mapper.Map<Agent>(agentDTO);
+            agent.IsActive = true;
             await unitOfWork.AgentRepository.Add(agent);
             await unitOfWork.SaveChanguesAsync();
-            return mapper.Map<AgentBaseInfo>(agent);
+            return _mapper.Map<AgentBaseInfo>(agent);
         }
 
         public async Task<AgentBaseInfo> Update(AgentDTO agentDTO)
         {
-            var existingAgent = await unitOfWork.AgentRepository.GetById(agentDTO.Id) ?? throw new NotFoundException();
-            mapper.Map(agentDTO, existingAgent);
+            Agent existingAgent = await unitOfWork.AgentRepository.GetById(agentDTO.Id) ?? throw new NotFoundException();
+            _mapper.Map(agentDTO, existingAgent);
             unitOfWork.AgentRepository.Update(existingAgent);
             await unitOfWork.SaveChanguesAsync();
-            return mapper.Map<AgentBaseInfo>(existingAgent);
+            return _mapper.Map<AgentBaseInfo>(existingAgent);
         }
 
         public async Task<bool> SetPassword(AgentPasswordInfo passwordInfo)
@@ -54,7 +57,7 @@ namespace AirportWarehouse.Infrastructure.Service
             try
             {
     
-                agent.Password = HashHelper.Hash(passwordInfo.Password);
+                agent.Password = _passwordService.Hash(passwordInfo.Password);
                 unitOfWork.AgentRepository.Update(agent);
                 await unitOfWork.SaveChanguesAsync();
                 return true;

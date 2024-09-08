@@ -1,4 +1,5 @@
-﻿using AirportWarehouse.Core.Interfaces;
+﻿using AirportWarehouse.Core.Exceptions;
+using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Options;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
@@ -12,7 +13,7 @@ namespace AirportWarehouse.Infrastructure.Service
             _options = options.Value;
         }
         private readonly PasswordOptions _options;
-        public bool Check(string hash, string password)
+        public void Check(string hash, string password)
         {
             var parts = hash.Split('.');
             if (parts.Length != 3)
@@ -30,7 +31,10 @@ namespace AirportWarehouse.Infrastructure.Service
                 iterations,
                 HashAlgorithmName.SHA256);
             var keyToCheck = algorithm.GetBytes(key.Length);
-            return keyToCheck.SequenceEqual(key);
+
+
+            if (!keyToCheck.SequenceEqual(key))
+                throw new CredentialsException("Check your credentials");
         }
 
         public string Hash(string password)

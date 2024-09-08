@@ -1,10 +1,10 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.Entites;
+using AirportWarehouse.Core.DTOs;
 
 namespace AirportWarehouse.Core.Interfaces
 {
     public interface ILoginService 
     {
-        Task<Agent?> Login(AgentLogin agent);
+        Task<AgentDTO> Login(AgentLogin agent);
     }
 }

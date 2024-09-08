@@ -12,7 +12,11 @@ namespace AirportWarehouse.Infrastructure.Mapping
             CreateMap<Agent, AgentDTO>();
             CreateMap<AgentDTO, Agent>()
                 .ForMember(dest => dest.Password, opt => opt.Ignore());
+//.ForMember(dest => dest.Password, opt => opt.Condition(src => !string.IsNullOrWhiteSpace(src.Password)));
+
             CreateMap<Agent, AgentBaseInfo>().ReverseMap();
+            CreateMap<AgentDTO, AgentBaseInfo>().ReverseMap();
+  
             CreateMap<Airport, AirportDTO>().ReverseMap();
             CreateMap<AgentPermission, AgentPermissionDTO>().ReverseMap();
             CreateMap<Airport, AirportDTO>().ReverseMap();
