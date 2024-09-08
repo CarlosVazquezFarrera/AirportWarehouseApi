@@ -14,13 +14,13 @@ namespace AirportWarehouse.Infrastructure.Service
     {
         public IEnumerable<AgentBaseInfo> GetAll()
         {
-            var agents = unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
+            var agents = GetAgentsWithoutAdmin();
             return mapper.Map<IEnumerable<AgentBaseInfo>>(agents);
         }
 
         public PagedResponse<AgentBaseInfo> GetPagedAgents(AgentParameters agentParameters)
         {
-            var agents = unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
+            var agents = GetAgentsWithoutAdmin();
             if (!String.IsNullOrEmpty(agentParameters.Search))
             {
                 agents = agents.Where(a => a.Name.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase)
@@ -41,10 +41,11 @@ namespace AirportWarehouse.Infrastructure.Service
 
         public async Task<AgentBaseInfo> Update(AgentDTO agentDTO)
         {
-            var agent = mapper.Map<Agent>(agentDTO);
-            unitOfWork.AgentRepository.Update(agent);
+            var existingAgent = await unitOfWork.AgentRepository.GetById(agentDTO.Id) ?? throw new NotFoundException();
+            mapper.Map(agentDTO, existingAgent);
+            unitOfWork.AgentRepository.Update(existingAgent);
             await unitOfWork.SaveChanguesAsync();
-            return mapper.Map<AgentBaseInfo>(agent);
+            return mapper.Map<AgentBaseInfo>(existingAgent);
         }
 
         public async Task<bool> SetPassword(AgentPasswordInfo passwordInfo)
@@ -62,6 +63,11 @@ namespace AirportWarehouse.Infrastructure.Service
             {
                 return false;
             }
+        }
+
+        private IEnumerable<Agent> GetAgentsWithoutAdmin()
+        {
+            return unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
         }
     }
 }
