@@ -53,7 +53,7 @@ namespace AirportWarehouse.Infrastructure.Service
 
         public async Task<bool> SetPassword(AgentPasswordInfo passwordInfo)
         {
-            var agent = await unitOfWork.AgentRepository.GetById(passwordInfo.Id) ?? throw new NotFoundException();
+            Agent agent = await unitOfWork.AgentRepository.GetById(passwordInfo.Id) ?? throw new NotFoundException();
             try
             {
     
@@ -83,6 +83,38 @@ namespace AirportWarehouse.Infrastructure.Service
         {
             var agents = GetAgentsWithoutAdmin().Where(agent => !agent.IsActive);
             return _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
+        }
+
+        public async Task<bool> DeactivateAgent(Guid IdAgent)
+        {
+            Agent agent = await unitOfWork.AgentRepository.GetById(IdAgent) ?? throw new NotFoundException();
+            try
+            {
+                agent.IsActive = false;
+                unitOfWork.AgentRepository.Update(agent);
+                await unitOfWork.SaveChanguesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> ActivateAgent(Guid IdAgent)
+        {
+            Agent agent = await unitOfWork.AgentRepository.GetById(IdAgent) ?? throw new NotFoundException();
+            try
+            {
+                agent.IsActive = true;
+                unitOfWork.AgentRepository.Update(agent);
+                await unitOfWork.SaveChanguesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

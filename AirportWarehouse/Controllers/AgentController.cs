@@ -57,5 +57,17 @@ namespace AirportWarehouse.Controllers
         {
             return Ok(await _agentService.SetPassword(passwordInfo));
         }
+
+        [HttpPatch("DeactivateAgent")]
+        public async Task<IActionResult> DeactivateAgent([FromBody] Guid IdAgent)
+        {
+            return Ok(await _agentService.DeactivateAgent(IdAgent));
+        }
+        [HttpPatch("ActivateAgent")]
+        public async Task<IActionResult> ActivateAgent([FromBody] Guid IdAgent)
+        {
+            return Ok(await _agentService.ActivateAgent(IdAgent));
+        }
     }
+    
 }
