@@ -1,48 +1,33 @@
-﻿using AirportWarehouse.Core.Entites;
+﻿using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Repositories;
+using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class ProductService : IProductService
+    public class ProductService : EntityDtoService<Product, ProductDTO>, IProductService
     {
-        public ProductService(IUnitOfWork unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
+
+        public ProductService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        private readonly IUnitOfWork _unitOfWork;
-
-        public IEnumerable<Product> GetProductsMissingInAirport(Guid idAirport)
+        public IEnumerable<ProductDTO> GetProductsMissingInAirport(Guid idAirport)
         {
-            var products = _unitOfWork.ProductRepository.GetAll().AsQueryable();
-            var supplies = _unitOfWork.SupplyRepository.GetAll().AsQueryable();
+            var products = _unitOfWork.Repository<Product>().GetAll().AsQueryable();
+            var supplies = _unitOfWork.Repository<Supply>().GetAll().AsQueryable();
             var result = (from p in products
                           join s in supplies.Where(s => s.AirportId == idAirport)
                           on p.Id equals s.ProductId into ps
                           from sub in ps.DefaultIfEmpty()
                           where sub == null
                           select p).ToList();
-            return result;
-        }
-
-        public IEnumerable<Product> GetAll()
-        {
-            return _unitOfWork.ProductRepository.GetAll();
-        }
-
-        public async Task<Product> CreateProduct(Product product)
-        {
-            await _unitOfWork.ProductRepository.Add(product);
-            await _unitOfWork.SaveChanguesAsync();
-            return product;
-        }
-
-        public async Task<Product> UpdateProduct(Product product)
-        {
-            _unitOfWork.ProductRepository.Update(product);
-            await _unitOfWork.SaveChanguesAsync();
-            return product;
+            return _mapper.Map<IEnumerable<ProductDTO>>(result);
         }
     }
 }

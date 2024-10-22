@@ -1,12 +1,11 @@
-﻿using AirportWarehouse.Core.Entites;
+﻿using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Entites;
+using AirportWarehouse.Core.Interfaces;
 
 namespace AirportWarehouse.Infrastructure.Repositories
 {
-    public interface IProductService
+    public interface IProductService : IEntityDtoService<Product, ProductDTO>
     {
-        IEnumerable<Product> GetProductsMissingInAirport(Guid idAirport);
-        IEnumerable<Product> GetAll();
-        Task<Product> CreateProduct(Product product);
-        Task<Product> UpdateProduct(Product product);
+        IEnumerable<ProductDTO> GetProductsMissingInAirport(Guid idAirport);
     }
 }

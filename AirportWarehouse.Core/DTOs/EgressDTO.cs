@@ -1,8 +1,7 @@
 ﻿namespace AirportWarehouse.Core.DTOs
 {
-    public class EgressDTO
+    public class EgressDTO : BaseDTO
     {
-        public Guid Id { get; set; }
 
         public int AmountRemoved { get; set; }
 

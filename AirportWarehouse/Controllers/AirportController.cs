@@ -1,7 +1,6 @@
 ﻿using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,23 +11,18 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class AirportController : ControllerBase
     {
-        public AirportController(IUnitOfWork unitOfWork, IMapper mapper)
+        public AirportController(IEntityDtoService<Airport, AirportDTO> airportService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _airportService = airportService;
         }
 
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        private readonly IEntityDtoService<Airport, AirportDTO> _airportService;
 
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            var airports = _unitOfWork.AirportRepository.GetAll();
-            var airpotsDTO = _mapper.Map<IEnumerable<AirportDTO>>(airports);
-            return Ok(airpotsDTO);
- 
+            return Ok(_airportService.GetAll());
         }
     }
 }

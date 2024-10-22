@@ -1,9 +1,9 @@
-﻿using AirportWarehouse.Core.Entites;
+﻿using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Entites;
 
 namespace AirportWarehouse.Core.Interfaces
 {
-    public interface IEgressService
+    public interface IEgressService : IEntityDtoService<Egress, EgressDTO>
     {
-        Task<Egress> Create(Egress egress);
     }
 }

@@ -1,9 +1,7 @@
 ﻿namespace AirportWarehouse.Core.DTOs
 {
-    public class PermissionDTO
+    public class PermissionDTO : BaseDTO
     {
-        public Guid Id { get; set; }
-
         public string Name { get; set; } = null!;
     }
 }

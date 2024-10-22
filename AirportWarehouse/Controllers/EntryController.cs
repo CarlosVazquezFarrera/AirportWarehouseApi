@@ -1,7 +1,6 @@
 ﻿using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,20 +11,16 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class EntryController : ControllerBase
     {
-        public EntryController(IEntryService entryService, IMapper mapper)
+        public EntryController(IEntityDtoService<Entry, EntryDTO> entityDtoService)
         {
-            _entryService = entryService;
-            _mapper = mapper;
+            _entityDtoService = entityDtoService;
         }
 
-        private readonly IMapper _mapper;
-        private readonly IEntryService _entryService;
+        private readonly IEntityDtoService<Entry, EntryDTO> _entityDtoService;
 
         [HttpPost]
-        public async Task<IActionResult> CreateEntry(EntryDTO entry) {
-            var entrySaved = await _entryService.Create(_mapper.Map<Entry>(entry));
-            var entrySavedDto = _mapper.Map<EntryDTO>(entrySaved);
-            return Ok(entrySavedDto);
+        public async Task<IActionResult> CreateEntry(EntryDTO entryDto) {
+            return Ok(await _entityDtoService.UpdateAsync(entryDto));
         }
     }
 }

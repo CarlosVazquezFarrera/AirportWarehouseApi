@@ -43,16 +43,12 @@ namespace AirportWarehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] ProductDTO product)
         {
-            var newProduct = await _productService.CreateProduct(_mapper.Map<Product>(product));
-            var productDto = _mapper.Map<ProductDTO>(newProduct);
-            return Ok(productDto);
+            return Ok(await _productService.AddAsync(product));
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] ProductDTO product) {
-            var newProduct = await _productService.UpdateProduct(_mapper.Map<Product>(product));
-            var productDto = _mapper.Map<ProductDTO>(newProduct);
-            return Ok(productDto);
+            return Ok(await _productService.UpdateAsync(product));
         }
     }
 }

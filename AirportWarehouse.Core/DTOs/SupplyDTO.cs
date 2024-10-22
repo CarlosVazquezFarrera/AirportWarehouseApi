@@ -1,9 +1,7 @@
 ﻿namespace AirportWarehouse.Core.DTOs
 {
-    public class SupplyDTO
+    public class SupplyDTO : BaseDTO
     {
-        public Guid Id { get; set; }
-
         public int CurrentQuantity { get; set; }
 
         public Guid ProductId { get; set; }

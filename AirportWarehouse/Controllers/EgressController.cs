@@ -23,7 +23,7 @@ namespace AirportWarehouse.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]EgressDTO egress) {
-            var egressDTO = _mapper.Map<EgressDTO>(await _egressService.Create(_mapper.Map<Egress>(egress)));
+            var egressDTO = _mapper.Map<EgressDTO>(await _egressService.AddAsync(egress));
             return Ok(egressDTO);
         }
     }

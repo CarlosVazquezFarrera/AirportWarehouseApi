@@ -1,5 +1,4 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
@@ -11,30 +10,24 @@ namespace AirportWarehouse.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        public LoginController(IJwtBearer jwt, ILoginService agentRepository, IMapper mapper, IPasswordService passwordService)
+        public LoginController(IJwtBearer jwt, IAgentService agentRepository, IMapper mapper)
         {
             _agentRepository = agentRepository;
             _jwt = jwt;
             _mapper = mapper;
-            _passwordService = passwordService;
         }
 
         private readonly IJwtBearer _jwt;
-        private readonly ILoginService _agentRepository;
+        private readonly IAgentService _agentRepository;
         private readonly IMapper _mapper;
-        private readonly IPasswordService _passwordService;
 
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] AgentLogin user)
         {
-            AgentDTO exitingAgent = await this._agentRepository.Login(user);
-
-            _passwordService.Check(exitingAgent.Password, user.Password);
-
-            var loginaAgent = _mapper.Map<AgentBaseInfo>(exitingAgent);
+            AgentBaseInfo exitingAgent = await this._agentRepository.Login(user);
 
             var agentInfo = new AgentInfo() {
-                Agent = loginaAgent,
+                Agent = exitingAgent,
                 Token = _jwt.GetJwtToken(exitingAgent.Name, exitingAgent.Email, exitingAgent.Id)
             };
 

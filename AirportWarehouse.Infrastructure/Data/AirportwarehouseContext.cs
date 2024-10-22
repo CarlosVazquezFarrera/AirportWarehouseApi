@@ -18,21 +18,23 @@ public partial class AirportwarehouseContext : DbContext
     public virtual DbSet<Agent> Agents { get; set; }
 
     public virtual DbSet<AgentPermission> AgentPermissions { get; set; }
-
     public virtual DbSet<Airport> Airports { get; set; }
-
     public virtual DbSet<Egress> Egresses { get; set; }
-
     public virtual DbSet<Entry> Entries { get; set; }
-
+    public virtual DbSet<PackagingType> PackagingTypes { get; set; }
     public virtual DbSet<Permission> Permissions { get; set; }
-
+    public virtual DbSet<Presentation> Presentations { get; set; }
+    public virtual DbSet<ProductFormat> ProductFormats { get; set; }
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<Supply> Supplies { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new PackagingTypeConfiguration());
+
+        modelBuilder.ApplyConfiguration(new PresentationConfiguration());
+
         modelBuilder.ApplyConfiguration(new AgentConfiguration());
 
         modelBuilder.ApplyConfiguration(new AgentPermissionConfiguration());
@@ -48,6 +50,8 @@ public partial class AirportwarehouseContext : DbContext
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
 
         modelBuilder.ApplyConfiguration(new SupplyConfiguration());
+
+        modelBuilder.ApplyConfiguration(new ProductFormatConfiguration());
 
         OnModelCreatingPartial(modelBuilder);
     }

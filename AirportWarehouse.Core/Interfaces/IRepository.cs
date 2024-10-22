@@ -12,7 +12,5 @@ namespace AirportWarehouse.Core.Interfaces
         void Update(T entity);
         Task<T?> GetByCondition(Expression<Func<T, bool>> predicate);
         IQueryable<T> Include(params Expression<Func<T, object>>[] includes);
-
-
     }
 }

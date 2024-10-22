@@ -9,37 +9,10 @@ namespace AirportWarehouse.Infrastructure.Repositories
         public UnitOfWork(AirportwarehouseContext context)
         {
             _context = context;
-            _egressRepository = new BaseRepositoty<Egress>(_context);
-            _supplyRepository = new BaseRepositoty<Supply>(_context);
-            _agentRepository = new BaseRepositoty<Agent>(_context);
-            _airportRepository = new BaseRepositoty<Airport>(_context);
-            _entryRepository = new BaseRepositoty<Entry>(_context);
-            _productRepository = new BaseRepositoty<Product>(_context);
-            _permissionRepository = new BaseRepositoty<Permission>(_context);
-            _agentPermissionRepository = new BaseRepositoty<AgentPermission>(_context);
         }
 
         private readonly AirportwarehouseContext _context;
-        private readonly IRepository<Egress> _egressRepository;
-        private readonly IRepository<Supply> _supplyRepository;
-        private readonly IRepository<Agent>  _agentRepository;
-        private readonly IRepository<Airport> _airportRepository;
-        private readonly IRepository<Entry> _entryRepository;
-        private readonly IRepository<Product> _productRepository;
-        private readonly IRepository<Permission> _permissionRepository;
-        private readonly IRepository<AgentPermission> _agentPermissionRepository;
-
-
-        public IRepository<Egress> EgressRepository => _egressRepository ?? new BaseRepositoty<Egress>(_context);
-        public IRepository<Supply> SupplyRepository => _supplyRepository ?? new BaseRepositoty<Supply>(_context);
-        public IRepository<Agent> AgentRepository => _agentRepository ?? new BaseRepositoty<Agent>(_context);
-        public IRepository<Airport> AirportRepository => _airportRepository ?? new BaseRepositoty<Airport>(_context);
-        public IRepository<Entry> EntryRepository => _entryRepository ?? new BaseRepositoty<Entry>(_context);
-        public IRepository<Product> ProductRepository => _productRepository ?? new BaseRepositoty<Product>(_context);
-
-        public IRepository<Permission> PermissionRepository => _permissionRepository ?? new BaseRepositoty<Permission>(_context);
-
-        public IRepository<AgentPermission> AgentPermissionRepository => _agentPermissionRepository ?? new BaseRepositoty<AgentPermission>(_context);
+        private readonly Dictionary<Type, object> _repositories = new Dictionary<Type, object>();
 
         public void Dispose()
         {
@@ -49,6 +22,31 @@ namespace AirportWarehouse.Infrastructure.Repositories
         public async Task SaveChanguesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+
+        public IRepository<T> Repository<T>() where T : BaseEntity
+        {
+            if (!_repositories.ContainsKey(typeof(T)))
+            {
+                var repository = new BaseRepositoty<T>(_context);
+                _repositories.Add(typeof(T), repository);
+            }
+            return (IRepository<T>)_repositories[typeof(T)];
+        }
+
+        public async Task BeginTransactionAsync()
+        {
+            await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync()
+        {
+            await _context.Database.CommitTransactionAsync();
+        }
+
+        public async Task RollbackAsync()
+        {
+            await _context.Database.RollbackTransactionAsync();
         }
     }
 }

@@ -1,65 +1,56 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class AgentService(IUnitOfWork unitOfWork, 
-        IPagedListService<AgentBaseInfo> _pagedListService, 
-        IMapper _mapper,
-        IPasswordService _passwordService) : IAgentService
+    public class AgentService : EntityDtoService<Agent, AgentDetailInfo>, IAgentService
     {
-        public IEnumerable<AgentBaseInfo> GetAll()
-        {
-            var agents = GetAgentsWithoutAdmin();
-            return _mapper.Map<IEnumerable<AgentBaseInfo>>(agents);
-        }
+       
+        private readonly IPagedListService<AgentBaseInfo> _pagedListService;
+        private readonly IPasswordService _passwordService;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
+        public AgentService(
+            IUnitOfWork unitOfWork, 
+            IMapper mapper,
+            IPagedListService<AgentBaseInfo> pagedListService, 
+            IPasswordService passwordService) : base(mapper, unitOfWork)
+        {
+            _pagedListService = pagedListService;
+            _passwordService = passwordService;
+            _unitOfWork = unitOfWork;
+            _mapper = mapper;
+        }
         public PagedResponse<AgentBaseInfo> GetPagedAgents(AgentParameters agentParameters)
         {
-            var agents = GetAgentsWithoutAdmin();
+            var agents = GetAllAgentsWithoutAdmin();
             if (!String.IsNullOrEmpty(agentParameters.Search))
             {
                 agents = agents.Where(a => a.Name.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase)
                 || a.AgentNumber.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase));
-
             }
             var pagedResponse = _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
             return pagedResponse;
         }
-
-        public async Task<AgentBaseInfo> Register(AgentDTO agentDTO)
+        public async Task<AgentBaseInfo> Update(AgentDetailInfo agentInfo)
         {
-            var agent = _mapper.Map<Agent>(agentDTO);
-            agent.IsActive = true;
-            await unitOfWork.AgentRepository.Add(agent);
-            await unitOfWork.SaveChanguesAsync();
-            return _mapper.Map<AgentBaseInfo>(agent);
-        }
-
-        public async Task<AgentBaseInfo> Update(AgentDTO agentDTO)
-        {
-            Agent existingAgent = await unitOfWork.AgentRepository.GetById(agentDTO.Id) ?? throw new NotFoundException();
-            _mapper.Map(agentDTO, existingAgent);
-            unitOfWork.AgentRepository.Update(existingAgent);
-            await unitOfWork.SaveChanguesAsync();
-            return _mapper.Map<AgentBaseInfo>(existingAgent);
+            return await UpdateAsync(agentInfo);
         }
 
         public async Task<bool> SetPassword(AgentPasswordInfo passwordInfo)
         {
-            Agent agent = await unitOfWork.AgentRepository.GetById(passwordInfo.Id) ?? throw new NotFoundException();
+            AgentDetailInfo agent = await GetByIdAsync(passwordInfo.Id);
             try
             {
-    
                 agent.Password = _passwordService.Hash(passwordInfo.Password);
-                unitOfWork.AgentRepository.Update(agent);
-                await unitOfWork.SaveChanguesAsync();
+                await Update(agent);
                 return true;
             }
             catch 
@@ -68,31 +59,13 @@ namespace AirportWarehouse.Infrastructure.Service
             }
         }
 
-        private IEnumerable<Agent> GetAgentsWithoutAdmin()
-        {
-            return unitOfWork.AgentRepository.GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
-        }
-
-        public PagedResponse<AgentBaseInfo> GetActiveAgentsPaged(BasePagedParameter agentParameters)
-        {
-            var agents = GetAgentsWithoutAdmin().Where(agent => agent.IsActive);
-            return _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
-        }
-
-        public PagedResponse<AgentBaseInfo> GetInactiveAgentsPaged(BasePagedParameter agentParameters)
-        {
-            var agents = GetAgentsWithoutAdmin().Where(agent => !agent.IsActive);
-            return _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
-        }
-
         public async Task<bool> DeactivateAgent(Guid IdAgent)
         {
-            Agent agent = await unitOfWork.AgentRepository.GetById(IdAgent) ?? throw new NotFoundException();
+            AgentDetailInfo agent = await GetByIdAsync(IdAgent);
             try
             {
                 agent.IsActive = false;
-                unitOfWork.AgentRepository.Update(agent);
-                await unitOfWork.SaveChanguesAsync();
+                await Update(agent);
                 return true;
             }
             catch
@@ -103,18 +76,40 @@ namespace AirportWarehouse.Infrastructure.Service
 
         public async Task<bool> ActivateAgent(Guid IdAgent)
         {
-            Agent agent = await unitOfWork.AgentRepository.GetById(IdAgent) ?? throw new NotFoundException();
+            AgentDetailInfo agent = await GetByIdAsync(IdAgent);
             try
             {
                 agent.IsActive = true;
-                unitOfWork.AgentRepository.Update(agent);
-                await unitOfWork.SaveChanguesAsync();
+                await Update(agent);
                 return true;
             }
             catch
             {
                 return false;
             }
+        }
+
+        public async Task<AgentBaseInfo> Register(AgentDetailInfo agentInfo)
+        {
+            return await AddAsync(agentInfo);
+        }
+
+        public IEnumerable<AgentBaseInfo> GetAllAgentsWithoutAdmin()
+        {
+            return _mapper.Map<IEnumerable<AgentBaseInfo>>(GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase)));
+        }
+
+        public async Task<AgentBaseInfo> Login(AgentLogin agent)
+        {
+            Agent existingAgent = await _unitOfWork.Repository<Agent>().Include(a => a.AgentPermissions)
+                .Where(
+                    a =>
+                    a.AgentNumber.Equals(agent.AgentNumber) &&
+                    a.IsActive &&
+                    a.AgentPermissions.Count != 0).FirstOrDefaultAsync() ?? throw new CredentialsException("Check your credentials");
+            _passwordService.Check(existingAgent.Password, agent.Password);
+
+            return _mapper.Map<AgentBaseInfo>(existingAgent);
         }
     }
 }

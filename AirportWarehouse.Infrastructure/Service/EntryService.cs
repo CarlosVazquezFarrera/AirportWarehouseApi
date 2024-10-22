@@ -1,39 +1,41 @@
-﻿using AirportWarehouse.Core.Entites;
-using AirportWarehouse.Core.Exceptions;
+﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
+using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class EntryService : IEntryService
+    public class EntryService : EntityDtoService<Entry, EntryDTO>, IEntryService
     {
-        public EntryService(IUnitOfWork unitOfWork, IClaimService claimService)
+
+        public EntryService(IMapper mapper, IUnitOfWork unitOfWork, IClaimService claimService, ISupplyService supplyService)  : base(mapper, unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _claimService = claimService;   
-
+            _userId = claimService.GetUserId();
+            _supplyService = supplyService;
         }
-
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IClaimService _claimService;
-        public async Task<Entry> Create(Entry entry)
+        private readonly ISupplyService _supplyService;
+        private readonly Guid _userId;
+        public async override Task<EntryDTO> AddAsync(EntryDTO entry)
         {
-
-            var supply = await _unitOfWork.SupplyRepository.GetById(entry.SupplyId);
-            if (supply == null)
-                throw new BusinessException("Supply was not found");
-            entry.AgentId = _claimService.GetUserId();
-            int newQuantity = supply.CurrentQuantity + entry.QuantityIncoming;
-            entry.QuantityBefore = supply.CurrentQuantity;
-            entry.QuantityAfter = newQuantity;
-
-            supply.CurrentQuantity = newQuantity;
-            entry.Supply = supply;
-
-            await _unitOfWork.EntryRepository.Add(entry);
-            await _unitOfWork.SaveChanguesAsync();
-            return entry;
-
-
+            try
+            {
+                await _unitOfWork.BeginTransactionAsync();
+                SupplyMovement movement = await _supplyService.IncreaseSupply(entry.SupplyId, entry.QuantityIncoming);
+                entry.SupplyId = _userId;
+                entry.QuantityBefore = movement.QuantityBefore;
+                entry.QuantityAfter = movement.QuantityAfter;
+                EntryDTO entryDTO = await base.AddAsync(entry);
+                await _unitOfWork.CommitTransactionAsync();
+                return entryDTO;
+            }
+            catch (Exception)
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
         }
     }
 }

@@ -15,25 +15,24 @@ namespace AirportWarehouse.Config
         {
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
             services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IJwtBearer, JwtBearerHelper>();
-            services.AddScoped<ILoginService, LoginService>();
-            services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<IInventoryRepository, InventoryRepository>();
-            services.AddScoped<IClaimService, ClaimService>();
-            services.AddScoped<IEgressService, EgressService>();
-            services.AddScoped<IEntryService, EntryService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<IAgentService, AgentService>();
-
-
-            services.AddSingleton<IPasswordService, PasswordService>();
+            services.AddScoped(typeof(IEntityDtoService<,>), typeof(EntityDtoService<,>));
             
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<IClaimService, ClaimService>();
+            services.AddSingleton<IPasswordService, PasswordService>();
+            services.AddTransient<IJwtBearer, JwtBearerHelper>();
 
             services.Configure<PaginationOptions>(configuration.GetSection("Pagination"));
             services.Configure<PasswordOptions>(configuration.GetSection("PasswordOptions"));
 
+            services.AddScoped<IAgentService, AgentService>();
+            services.AddScoped<IEgressService, EgressService>();
+            services.AddScoped<IEntryService, EntryService>();
+            services.AddScoped<IProductService, ProductService>(); 
+
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IInventoryRepository, InventoryRepository>();
+            services.AddScoped<ISupplyService, SupplyService>();
             return services;
         }
     }

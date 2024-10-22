@@ -1,10 +1,9 @@
-﻿using AirportWarehouse.Core.Entites;
+﻿using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Entites;
 
 namespace AirportWarehouse.Core.Interfaces
 {
-    public interface IEntryService
+    public interface IEntryService : IEntityDtoService<Entry, EntryDTO>
     {
-        Task<Entry> Create(Entry entry);
-
     }
 }

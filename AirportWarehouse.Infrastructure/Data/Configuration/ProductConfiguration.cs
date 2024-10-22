@@ -20,6 +20,24 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
 
             builder.Property(e => e.SupplierPart)
                 .IsUnicode(false);
+
+            builder.HasOne(d => d.PackagingType)
+                .WithMany(p => p.Products)
+                .HasForeignKey(d => d.PackagingTypeId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PackagingType");
+
+            builder.HasOne(d => d.Presentation)
+                .WithMany(p => p.Products)
+                .HasForeignKey(d => d.PresentationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Presentation");
+
+            builder.HasOne(d => d.ProductFormat)
+               .WithMany(p => p.Products)
+               .HasForeignKey(d => d.ProductFormatId)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_ProductFormat");
         }
     }
 

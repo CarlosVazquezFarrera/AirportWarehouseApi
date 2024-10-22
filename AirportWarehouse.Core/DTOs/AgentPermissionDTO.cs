@@ -1,8 +1,7 @@
 ﻿namespace AirportWarehouse.Core.DTOs
 {
-    public class AgentPermissionDTO
+    public class AgentPermissionDTO : BaseDTO
     {
-        public Guid Id { get; set; }
 
         public Guid AgentId { get; set; }
 

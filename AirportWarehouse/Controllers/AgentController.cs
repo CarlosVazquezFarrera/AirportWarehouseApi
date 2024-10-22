@@ -1,5 +1,4 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using Microsoft.AspNetCore.Authorization;
@@ -23,7 +22,7 @@ namespace AirportWarehouse.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            return Ok(_agentService.GetAll());
+            return Ok(_agentService.GetAllAgentsWithoutAdmin());
         }
 
         [HttpGet("GetPagedAgents")]
@@ -31,25 +30,15 @@ namespace AirportWarehouse.Controllers
         {
             return Ok(_agentService.GetPagedAgents(agentParameters));
         }
-        [HttpGet("GetActiveAgentsPaged")]
-        public IActionResult GetActiveAgentsPaged([FromQuery] BasePagedParameter agentParameters)
-        {
-            return Ok(_agentService.GetActiveAgentsPaged(agentParameters));
-        }
-        [HttpGet("GetInactiveAgentsPaged")]
-        public IActionResult GetInactiveAgentsPaged([FromQuery] BasePagedParameter agentParameters)
-        {
-            return Ok(_agentService.GetInactiveAgentsPaged(agentParameters));
-        }
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] AgentDTO agentDTO)
+        public async Task<IActionResult> Create([FromBody] AgentDetailInfo agentDTO)
         {
-            return Ok(await _agentService.Register(agentDTO));
+            return Ok(await _agentService.AddAsync(agentDTO));
         }
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] AgentDTO agentDTO)
+        public async Task<IActionResult> Update([FromBody] AgentDetailInfo agentDTO)
         {
-            return Ok(await _agentService.Update(agentDTO));
+            return Ok(await _agentService.UpdateAsync(agentDTO));
         }
 
         [HttpPatch("SetPassword")]
