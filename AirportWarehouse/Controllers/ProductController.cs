@@ -1,5 +1,4 @@
 ﻿using AirportWarehouse.Core.DTOs;
-using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.QueryFilter;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AirportWarehouse.Infrastructure.Repositories;

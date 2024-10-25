@@ -4,7 +4,10 @@
     {
         public string Name { get; set; } = null!;
         public string? SupplierPart { get; set; }
+        public Guid? PackagingTypeId { get; set; }
+        public Guid? PresentationId { get; set; }
         public int PresentationQuantity { get; set; }
+        public Guid? ProductFormatId { get; set; }
         public int FormatQuantity { get; set; }
     }
 }

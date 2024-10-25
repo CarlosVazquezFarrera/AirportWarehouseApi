@@ -1,7 +1,8 @@
 ﻿namespace AirportWarehouse.Core.DTOs
 {
-    public class ProductFormatDTO : BaseDTO
+    public class PresentationDTO : BaseDTO
     {
         public string Name { get; set; } = null!;
+
     }
 }

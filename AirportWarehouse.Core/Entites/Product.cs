@@ -11,6 +11,7 @@ namespace AirportWarehouse.Core.Entites
         public int PresentationQuantity { get; set; }
         public Guid? ProductFormatId { get; set; }
         public int FormatQuantity { get; set; }
+        public int Stock { get; set; }
         public virtual PackagingType PackagingType { get; set; } = null!;
         public virtual Presentation Presentation { get; set; } = null!;
         public virtual ProductFormat ProductFormat { get; set; } = null!;
