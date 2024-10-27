@@ -23,6 +23,12 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
             builder.Property(e => e.ShortName)
                 .HasMaxLength(45)
                 .IsUnicode(false);
+
+            builder.HasOne(d => d.Airports)
+              .WithMany(p => p.Agents)
+              .HasForeignKey(d => d.AirportId)
+              .OnDelete(DeleteBehavior.ClientSetNull)
+              .HasConstraintName("FK_Airports");
         }
     }
 

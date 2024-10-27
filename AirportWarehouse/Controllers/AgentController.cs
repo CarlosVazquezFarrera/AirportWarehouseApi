@@ -1,4 +1,5 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using Microsoft.AspNetCore.Authorization;
@@ -31,31 +32,14 @@ namespace AirportWarehouse.Controllers
             return Ok(_agentService.GetPagedAgents(agentParameters));
         }
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] AgentDetailInfo agentDTO)
+        public async Task<IActionResult> Create([FromBody] AgentDTO agentDTO)
         {
             return Ok(await _agentService.AddAsync(agentDTO));
         }
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] AgentDetailInfo agentDTO)
+        public async Task<IActionResult> Update([FromBody] AgentDTO agentDTO)
         {
             return Ok(await _agentService.UpdateAsync(agentDTO));
-        }
-
-        [HttpPatch("SetPassword")]
-        public async Task<IActionResult> SetPassword([FromBody] AgentPasswordInfo passwordInfo)
-        {
-            return Ok(await _agentService.SetPassword(passwordInfo));
-        }
-
-        [HttpPatch("DeactivateAgent")]
-        public async Task<IActionResult> DeactivateAgent([FromBody] Guid IdAgent)
-        {
-            return Ok(await _agentService.DeactivateAgent(IdAgent));
-        }
-        [HttpPatch("ActivateAgent")]
-        public async Task<IActionResult> ActivateAgent([FromBody] Guid IdAgent)
-        {
-            return Ok(await _agentService.ActivateAgent(IdAgent));
         }
     }
     

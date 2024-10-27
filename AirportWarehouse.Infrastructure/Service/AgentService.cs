@@ -1,4 +1,5 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
@@ -9,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class AgentService : EntityDtoService<Agent, AgentDetailInfo>, IAgentService
+    public class AgentService : EntityDtoService<Agent, AgentDTO>, IAgentService
     {
        
         private readonly IPagedListService<AgentBaseInfo> _pagedListService;
@@ -39,64 +40,9 @@ namespace AirportWarehouse.Infrastructure.Service
             var pagedResponse = _pagedListService.Paginate(_mapper.Map<IEnumerable<AgentBaseInfo>>(agents), agentParameters.PageNumber, agentParameters.PageSize);
             return pagedResponse;
         }
-        public async Task<AgentBaseInfo> Update(AgentDetailInfo agentInfo)
+        public IEnumerable<AgentDTO> GetAllAgentsWithoutAdmin()
         {
-            return await UpdateAsync(agentInfo);
-        }
-
-        public async Task<bool> SetPassword(AgentPasswordInfo passwordInfo)
-        {
-            AgentDetailInfo agent = await GetByIdAsync(passwordInfo.Id);
-            try
-            {
-                agent.Password = _passwordService.Hash(passwordInfo.Password);
-                await Update(agent);
-                return true;
-            }
-            catch 
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> DeactivateAgent(Guid IdAgent)
-        {
-            AgentDetailInfo agent = await GetByIdAsync(IdAgent);
-            try
-            {
-                agent.IsActive = false;
-                await Update(agent);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<bool> ActivateAgent(Guid IdAgent)
-        {
-            AgentDetailInfo agent = await GetByIdAsync(IdAgent);
-            try
-            {
-                agent.IsActive = true;
-                await Update(agent);
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public async Task<AgentBaseInfo> Register(AgentDetailInfo agentInfo)
-        {
-            return await AddAsync(agentInfo);
-        }
-
-        public IEnumerable<AgentBaseInfo> GetAllAgentsWithoutAdmin()
-        {
-            return _mapper.Map<IEnumerable<AgentBaseInfo>>(GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase)));
+            return GetAll().Where(agent => !agent.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task<AgentBaseInfo> Login(AgentLogin agent)

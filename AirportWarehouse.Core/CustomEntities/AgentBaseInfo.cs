@@ -6,11 +6,10 @@ namespace AirportWarehouse.Core.CustomEntities
     {
         public string AgentNumber { get; set; } = null!;
         public string ShortName { get; set; } = null!;
-
         public string Name { get; set; } = null!;
-
         public string LastName { get; set; } = null!;
-
         public string Email { get; set; } = null!;
+        public Guid AirportId { get; set; }
+
     }
 }

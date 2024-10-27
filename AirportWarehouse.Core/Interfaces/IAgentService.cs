@@ -1,16 +1,14 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.QueryFilter;
 
 namespace AirportWarehouse.Core.Interfaces
 {
-    public interface IAgentService : IEntityDtoService<Agent, AgentDetailInfo>
+    public interface IAgentService : IEntityDtoService<Agent, AgentDTO>
     {
         PagedResponse<AgentBaseInfo> GetPagedAgents(AgentParameters agentParameters);
-        IEnumerable<AgentBaseInfo> GetAllAgentsWithoutAdmin();
-        Task<bool> SetPassword(AgentPasswordInfo agentPasswordInfo);
-        Task<bool> DeactivateAgent(Guid IdAgent);
-        Task<bool> ActivateAgent(Guid IdAgent);
+        IEnumerable<AgentDTO> GetAllAgentsWithoutAdmin();
         Task<AgentBaseInfo> Login(AgentLogin agent);
     }
 }

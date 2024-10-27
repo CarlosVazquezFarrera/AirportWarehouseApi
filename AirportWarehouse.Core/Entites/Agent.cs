@@ -16,6 +16,10 @@
 
         public bool IsActive { get; set; }
 
+        public Guid AirportId { get; set; }
+
+        public virtual Airport Airports { get; set; } = null!;
+
         public virtual ICollection<AgentPermission> AgentPermissions { get; set; } = new List<AgentPermission>();
 
         public virtual ICollection<Egress> EgressApprovers { get; set; } = new List<Egress>();

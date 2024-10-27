@@ -1,9 +1,9 @@
-﻿using AirportWarehouse.Core.CustomEntities;
+﻿using AirportWarehouse.Core.DTOs;
 using FluentValidation;
 
 namespace AirportWarehouse.Infrastructure.Validations
 {
-    public class AgentValidation : AbstractValidator<AgentDetailInfo>
+    public class AgentValidation : AbstractValidator<AgentDTO>
     {
         public AgentValidation()
         {
