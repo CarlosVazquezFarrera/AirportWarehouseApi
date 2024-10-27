@@ -1,8 +1,6 @@
 ﻿using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
-using AirportWarehouse.Infrastructure.Interfaces;
-using AirportWarehouse.Infrastructure.Repositories;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,30 +11,17 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class ProductController : ControllerBase
     {
-        public ProductController(IMapper mapper, IPagedListService<ProductDTO> pagedListService, IProductService productService)
+        public ProductController(IProductService productService)
         {
-            _mapper = mapper;
-            _pagedListService = pagedListService;
             _productService = productService;
         }
 
-        private readonly IMapper _mapper;
-        private readonly IPagedListService<ProductDTO> _pagedListService;
         private readonly IProductService _productService;
 
-        [HttpGet]
-        public IActionResult GetAll([FromQuery] BasePagedParameter parameters)
+        [HttpGet("GetByAirport")]
+        public IActionResult GetAll([FromQuery] ProductsFilter parameters)
         {
-            var produtsDto = _mapper.Map<IEnumerable<ProductDTO>>(_productService.GetAll());
-            var pagedResponse = _pagedListService.Paginate(produtsDto, parameters.PageNumber, parameters.PageSize);
-            return Ok(pagedResponse);
-        }
-
-        [HttpGet("GetProductsMissingInAirport")]
-        public IActionResult GetProductsMissingInAirport(Guid IdAirport)
-        {
-            IEnumerable<ProductDTO> productsMissingInAirport = _mapper.Map<IEnumerable< ProductDTO >>(_productService.GetProductsMissingInAirport(IdAirport));
-            return Ok(productsMissingInAirport);
+            return Ok(_productService.GetProdcutsByAirport(parameters));
         }
 
         [HttpPost]

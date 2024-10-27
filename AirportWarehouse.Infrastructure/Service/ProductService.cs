@@ -1,33 +1,44 @@
-﻿using AirportWarehouse.Core.DTOs;
+﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
-using AirportWarehouse.Infrastructure.Repositories;
+using AirportWarehouse.Core.QueryFilter;
+using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
+using System.Linq.Expressions;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
     public class ProductService : EntityDtoService<Product, ProductDTO>, IProductService
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
-
-        public ProductService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
+        private readonly IClaimService _claimService;
+        private readonly IQueryService<ProductDTO> _queryService;
+        public ProductService(IMapper mapper, IUnitOfWork unitOfWork, IClaimService claimService, IPagedListService<ProductDTO> pagedListService, IQueryService<ProductDTO> queryService) : base(mapper, unitOfWork, pagedListService)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            _claimService = claimService;
+            _queryService = queryService;
+        }
+        public override Task<ProductDTO> AddAsync(ProductDTO ProductDTO)
+        {
+            ProductDTO.AirportId = _claimService.GetAirpotId();
+            return base.AddAsync(ProductDTO);
         }
 
-        public IEnumerable<ProductDTO> GetProductsMissingInAirport(Guid idAirport)
+        public PagedResponse<ProductDTO> GetProdcutsByAirport(ProductsFilter parameters)
         {
-            var products = _unitOfWork.Repository<Product>().GetAll().AsQueryable();
-            var supplies = _unitOfWork.Repository<Supply>().GetAll().AsQueryable();
-            var result = (from p in products
-                          join s in supplies.Where(s => s.AirportId == idAirport)
-                          on p.Id equals s.ProductId into ps
-                          from sub in ps.DefaultIfEmpty()
-                          where sub == null
-                          select p).ToList();
-            return _mapper.Map<IEnumerable<ProductDTO>>(result);
+            Guid airportId = parameters.AirportId == Guid.Empty ? _claimService.GetAirpotId() : parameters.AirportId;
+            var filters = new List<Expression<Func<ProductDTO, bool>>>()
+            {
+                p => p.AirportId.Equals(airportId),
+            };
+
+            if (!String.IsNullOrEmpty(parameters.Search))
+            {
+                filters.Add(
+                    p=> p.Name.Contains(parameters.Search, StringComparison.CurrentCultureIgnoreCase) ||
+                p.SupplierPart!.Contains(parameters.Search, StringComparison.CurrentCultureIgnoreCase));
+            }
+            return _queryService.FilterAndPaginate(GetAll(), filters, parameters.PageNumber,parameters.PageSize);
         }
     }
 }

@@ -38,6 +38,12 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                .HasForeignKey(d => d.ProductFormatId)
                .OnDelete(DeleteBehavior.ClientSetNull)
                .HasConstraintName("FK_ProductFormat");
+            
+            builder.HasOne(d => d.Airport)
+             .WithMany(p => p.Products)
+             .HasForeignKey(d => d.AirportId)
+             .OnDelete(DeleteBehavior.ClientSetNull)
+             .HasConstraintName("FK_AirportId");
         }
     }
 

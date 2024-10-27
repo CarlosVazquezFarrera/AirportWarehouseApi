@@ -24,11 +24,14 @@ namespace AirportWarehouse.Controllers
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] AgentLogin user)
         {
-            AgentBaseInfo exitingAgent = await this._agentRepository.Login(user);
+            AgentDetailInfo exitingAgent = await this._agentRepository.Login(user);
 
             var agentInfo = new AgentInfo() {
-                Agent = exitingAgent,
-                Token = _jwt.GetJwtToken(exitingAgent.Name, exitingAgent.Email, exitingAgent.Id)
+                Agent = _mapper.Map<AgentBaseInfo>(exitingAgent),
+                Token = _jwt.GetJwtToken(exitingAgent.Name, 
+                exitingAgent.Email, 
+                exitingAgent.Id,
+                exitingAgent.AirportId)
             };
 
             return Ok(agentInfo);

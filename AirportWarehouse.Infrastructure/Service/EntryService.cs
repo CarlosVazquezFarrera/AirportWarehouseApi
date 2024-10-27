@@ -2,14 +2,14 @@
 using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class EntryService : EntityDtoService<Entry, EntryDTO>, IEntryService
+    public class EntryService : EntityDtoService<Entry, EntryDTO>, IEntityDtoService<Entry, EntryDTO>
     {
-
-        public EntryService(IMapper mapper, IUnitOfWork unitOfWork, IClaimService claimService, ISupplyService supplyService)  : base(mapper, unitOfWork)
+        public EntryService(IMapper mapper, IUnitOfWork unitOfWork, IClaimService claimService, ISupplyService supplyService, IPagedListService<EntryDTO> pagedListService)  : base(mapper, unitOfWork, pagedListService)
         {
             _unitOfWork = unitOfWork;
             _userId = claimService.GetUserId();

@@ -23,7 +23,7 @@ namespace AirportWarehouse.Infrastructure.Helpers
         private readonly SigningCredentials _signingCredentials;
         private readonly JwtHeader _jwtHeader;
 
-        public string GetJwtToken(string Name, string Email, Guid Id)
+        public string GetJwtToken(string Name, string Email, Guid Id, Guid AirportId)
         {
 
             var claims = new List<Claim>() 
@@ -31,6 +31,7 @@ namespace AirportWarehouse.Infrastructure.Helpers
                 new(ClaimTypes.Name, Name),
                 new(ClaimTypes.Email, Email),
                 new(ClaimTypes.NameIdentifier, Id.ToString()),
+                new("AirportId", AirportId.ToString())
             };
             var payload = new JwtPayload (_jwtSetting.Value.Issuer, _jwtSetting.Value.Audience, claims, DateTime.Now, DateTime.UtcNow.AddHours(12));
             var token = new JwtSecurityToken(_jwtHeader, payload);

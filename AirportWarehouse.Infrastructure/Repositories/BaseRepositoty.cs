@@ -25,7 +25,7 @@ namespace AirportWarehouse.Infrastructure.Repositories
             }
         }
 
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
             return _entity.AsNoTracking().AsQueryable();
         }

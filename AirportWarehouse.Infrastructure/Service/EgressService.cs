@@ -3,14 +3,15 @@ using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Infrastructure.Interfaces;
 using AirportWarehouse.Infrastructure.Repositories;
 using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class EgressService : EntityDtoService<Egress, EgressDTO>,  IEgressService
+    public class EgressService : EntityDtoService<Egress, EgressDTO>,  IEntityDtoService<Egress, EgressDTO>
     {
-        public EgressService(IMapper mapper, IUnitOfWork unitOfWork, ISupplyService supplyService, IClaimService claimService) : base(mapper, unitOfWork)
+        public EgressService(IMapper mapper, IUnitOfWork unitOfWork, ISupplyService supplyService, IClaimService claimService, IPagedListService<EgressDTO> pagedListService) : base(mapper, unitOfWork, pagedListService)
         {
             _unitOfWork = unitOfWork;
             _supplyService = supplyService;

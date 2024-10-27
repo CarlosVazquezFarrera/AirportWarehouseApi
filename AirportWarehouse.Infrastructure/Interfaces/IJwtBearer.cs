@@ -2,6 +2,6 @@
 {
     public interface IJwtBearer
     {
-        string GetJwtToken(string Name, string Email, Guid Id);
+        string GetJwtToken(string Name, string Email, Guid Id, Guid AirportId);
     }
 }

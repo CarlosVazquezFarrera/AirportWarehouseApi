@@ -12,19 +12,16 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class EgressController : ControllerBase
     {
-        public EgressController(IEgressService egressService, IMapper mapper)
+        public EgressController(IEntityDtoService<Egress, EgressDTO> egressService)
         {
             _egressService = egressService;
-            _mapper = mapper;
         }
 
-        private readonly IEgressService _egressService;
-        private readonly IMapper _mapper;
+        private readonly IEntityDtoService<Egress, EgressDTO> _egressService;
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]EgressDTO egress) {
-            var egressDTO = _mapper.Map<EgressDTO>(await _egressService.AddAsync(egress));
-            return Ok(egressDTO);
+            return Ok(await _egressService.AddAsync(egress));
         }
     }
 }

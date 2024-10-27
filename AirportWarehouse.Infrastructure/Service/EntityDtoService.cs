@@ -1,7 +1,9 @@
-﻿using AirportWarehouse.Core.DTOs;
+﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
@@ -10,14 +12,16 @@ namespace AirportWarehouse.Infrastructure.Service
         where TEntity : BaseEntity
         where TDto : BaseDTO
     {
-        public EntityDtoService(IMapper mapper, IUnitOfWork unitOfWork)
+        public EntityDtoService(IMapper mapper, IUnitOfWork unitOfWork, IPagedListService<TDto> pagedListService)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _pagedListService = pagedListService;
         }
 
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPagedListService<TDto> _pagedListService;
         public IEnumerable<TDto> GetAll()
         {
             var entities = _unitOfWork.Repository<TEntity>().GetAll();
@@ -45,6 +49,10 @@ namespace AirportWarehouse.Infrastructure.Service
             _unitOfWork.Repository<TEntity>().Update(existingEntity);
             await _unitOfWork.SaveChanguesAsync();
             return DtoEntity;
+        }
+        public PagedResponse<TDto> GetPaged(int? pageNumber, int? pageSize)
+        {
+            return _pagedListService.Paginate(GetAll(), pageNumber, pageSize);
         }
     }
 }

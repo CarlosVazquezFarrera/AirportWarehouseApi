@@ -37,7 +37,7 @@ namespace AirportWarehouse.Controllers
             return Ok(await _agentService.AddAsync(agentDTO));
         }
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] AgentDTO agentDTO)
+        public async Task<IActionResult> Update([FromBody] AgentEditableInfo agentDTO)
         {
             return Ok(await _agentService.UpdateAsync(agentDTO));
         }

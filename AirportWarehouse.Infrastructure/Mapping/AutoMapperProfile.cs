@@ -9,11 +9,12 @@ namespace AirportWarehouse.Infrastructure.Mapping
     {
         public AutoMapperProfile()
         {
-            CreateMap<AgentDTO, AgentBaseInfo>();
-            CreateMap<Agent, AgentBaseInfo>().ReverseMap();
-            CreateMap<Agent, AgentDTO>();
-            CreateMap<AgentDTO, Agent>()
+            CreateMap<Agent, AgentDetailInfo>();
+            CreateMap<AgentDetailInfo, AgentBaseInfo>().ReverseMap();
+            CreateMap<AgentDTO, Agent>();
+            CreateMap<AgentEditableInfo, Agent>()
                .ForMember(dest => dest.Password, opt => opt.Ignore());
+
 
             CreateMap<Airport, AirportDTO>().ReverseMap();
             CreateMap<AgentPermission, AgentPermissionDTO>().ReverseMap();

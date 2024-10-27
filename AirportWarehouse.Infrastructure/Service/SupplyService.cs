@@ -3,13 +3,14 @@ using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
+using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
     public class SupplyService : EntityDtoService<Supply, SupplyDTO>, ISupplyService
     {
-        public SupplyService(IMapper mapper, IUnitOfWork unitOfWork) : base(mapper, unitOfWork)
+        public SupplyService(IMapper mapper, IUnitOfWork unitOfWork, IPagedListService<SupplyDTO> pagedListService) : base(mapper, unitOfWork, pagedListService)
         {
         }
 
