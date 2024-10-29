@@ -27,11 +27,19 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PackagingType");
 
+            //builder
+            //    .Navigation(p => p.PackagingType)
+            //    .AutoInclude();
+
             builder.HasOne(d => d.Presentation)
                 .WithMany(p => p.Products)
                 .HasForeignKey(d => d.PresentationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Presentation");
+
+            //builder
+            //    .Navigation(d => d.Presentation)
+            //    .AutoInclude();
 
             builder.HasOne(d => d.ProductFormat)
                .WithMany(p => p.Products)

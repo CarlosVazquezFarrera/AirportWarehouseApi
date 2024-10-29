@@ -25,7 +25,7 @@ namespace AirportWarehouse.Infrastructure.Repositories
             }
         }
 
-        public IQueryable<T> GetAll()
+        public IEnumerable<T> GetAll()
         {
             return _entity.AsNoTracking().AsQueryable();
         }
@@ -60,7 +60,7 @@ namespace AirportWarehouse.Infrastructure.Repositories
                 query = query.Include(include);
             }
 
-            return query;
+            return query.AsQueryable();
         }
     }
 }

@@ -1,10 +1,8 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
 using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
-using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Interfaces;
-using AirportWarehouse.Infrastructure.Repositories;
 using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service

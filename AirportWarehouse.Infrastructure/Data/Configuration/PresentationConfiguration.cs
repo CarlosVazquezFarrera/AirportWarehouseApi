@@ -12,6 +12,7 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
             builder.ToTable("Presentation");
             builder.Property(e => e.Id)
                 .HasDefaultValueSql("uuid_generate_v4()");
+
         }
     }
 }

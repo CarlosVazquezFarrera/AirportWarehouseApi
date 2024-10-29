@@ -42,7 +42,7 @@ namespace AirportWarehouse.Infrastructure.Service
             return _mapper.Map<TDto>(entity) ;
         }
 
-        public async Task<TDto> UpdateAsync(TDto DtoEntity)
+        public virtual async Task<TDto> UpdateAsync(TDto DtoEntity)
         {
             var existingEntity = await _unitOfWork.Repository<TEntity>().GetById(DtoEntity.Id) ?? throw new NotFoundException();
             _mapper.Map(DtoEntity, existingEntity);

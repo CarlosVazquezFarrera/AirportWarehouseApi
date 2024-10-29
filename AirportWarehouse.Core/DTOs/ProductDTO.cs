@@ -1,4 +1,6 @@
-﻿namespace AirportWarehouse.Core.DTOs
+﻿using AirportWarehouse.Core.CustomEntities;
+
+namespace AirportWarehouse.Core.DTOs
 {
     public class ProductDTO : BaseDTO
     {
@@ -9,6 +11,11 @@
         public int PresentationQuantity { get; set; }
         public Guid ProductFormatId { get; set; }
         public int FormatQuantity { get; set; }
+        public int Stock { get; set; }
         public Guid AirportId { get; set; }
+        public string PackagingTypeName { get; set; } = null!;
+        public string ProductFormatName { get; set; } = null!;
+        public string PresentationName { get; set; } = null!;
+
     }
 }
