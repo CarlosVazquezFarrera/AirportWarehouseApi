@@ -27,8 +27,6 @@ public partial class AirportwarehouseContext : DbContext
     public virtual DbSet<ProductFormat> ProductFormats { get; set; }
     public virtual DbSet<Product> Products { get; set; }
 
-    public virtual DbSet<Supply> Supplies { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new PackagingTypeConfiguration());
@@ -48,8 +46,6 @@ public partial class AirportwarehouseContext : DbContext
         modelBuilder.ApplyConfiguration(new PermissionConfiguration());
 
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
-
-        modelBuilder.ApplyConfiguration(new SupplyConfiguration());
 
         modelBuilder.ApplyConfiguration(new ProductFormatConfiguration());
 

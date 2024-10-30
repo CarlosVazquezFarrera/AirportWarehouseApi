@@ -17,7 +17,6 @@ namespace AirportWarehouse.Core.Entites
         public virtual Presentation Presentation { get; set; } = null!;
         public virtual ProductFormat ProductFormat { get; set; } = null!;
         public virtual Airport Airport { get; set; } = null!;
-        public virtual ICollection<Supply> Supplies { get; set; } = new List<Supply>();
         public virtual ICollection<Egress> Egresses { get; set; } = new List<Egress>();
         public virtual ICollection<Entry> Entries { get; set; } = new List<Entry>();
 

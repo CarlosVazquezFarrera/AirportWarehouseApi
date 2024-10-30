@@ -25,11 +25,11 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EgressApprover");
 
-            builder.HasOne(d => d.ApproverNavigation)
+            builder.HasOne(d => d.Product)
                 .WithMany(p => p.Egresses)
-                .HasForeignKey(d => d.SupplyId)
+                .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull) 
-                .HasConstraintName("FK_EgressSupply"); 
+                .HasConstraintName("FK_EgressProduct"); 
 
             builder.HasOne(d => d.Petitioner)
                 .WithMany(p => p.EgressPetitioners)

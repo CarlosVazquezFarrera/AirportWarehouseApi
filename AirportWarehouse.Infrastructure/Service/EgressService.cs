@@ -7,38 +7,37 @@ using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class EgressService : EntityDtoService<Egress, EgressDTO>,  IEntityDtoService<Egress, EgressDTO>
+    public class EgressService : EntityDtoService<Egress, EgressDTO>, IEntityDtoService<Egress, EgressDTO>
     {
-        public EgressService(IMapper mapper, IUnitOfWork unitOfWork, ISupplyService supplyService, IClaimService claimService, IPagedListService<EgressDTO> pagedListService) : base(mapper, unitOfWork, pagedListService)
+        public EgressService(IMapper mapper, IUnitOfWork unitOfWork, IPagedListService<EgressDTO> pagedListService, IProductService productService, IClaimService claimService) : base(mapper, unitOfWork, pagedListService)
         {
             _unitOfWork = unitOfWork;
-            _supplyService = supplyService;
-            _userId = claimService.GetUserId();
+            _productService = productService;
+            agentId = claimService.GetUserId();
         }
 
         private readonly IUnitOfWork _unitOfWork;
-        private readonly ISupplyService _supplyService;
-        private readonly Guid _userId;
-
+        private readonly IProductService _productService;
+        private readonly Guid agentId;
         public async override Task<EgressDTO> AddAsync(EgressDTO egress)
         {
             try
             {
                 await _unitOfWork.BeginTransactionAsync();
-                SupplyMovement movement = await _supplyService.DecreaseSupply(egress.SupplyId, egress.AmountRemoved);
-                egress.ApproverId = _userId;
+                SupplyMovement movement = await _productService.DecreaseProduct(egress.ProductId, egress.AmountRemoved);
                 egress.QuantityBefore = movement.QuantityBefore;
+                egress.ApproverId = agentId;
                 egress.QuantityAfter = movement.QuantityAfter;
-                EgressDTO egressDTO = await base.AddAsync(egress);
-                await _unitOfWork.SaveChanguesAsync();
-                return egressDTO;
+                EgressDTO entryDTO = await base.AddAsync(egress);
+                await _unitOfWork.CommitTransactionAsync();
+                return entryDTO;
             }
             catch (Exception)
             {
                 await _unitOfWork.RollbackAsync();
                 throw;
             }
-         
         }
+
     }
 }

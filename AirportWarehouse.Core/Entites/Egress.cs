@@ -2,7 +2,6 @@
 {
     public partial class Egress : BaseEntity
     {
-
         public int AmountRemoved { get; set; }
         public int QuantityBefore { get; set; }
         public int QuantityAfter { get; set; }

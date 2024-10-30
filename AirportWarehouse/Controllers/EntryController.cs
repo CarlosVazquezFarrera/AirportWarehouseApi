@@ -20,7 +20,7 @@ namespace AirportWarehouse.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateEntry(EntryDTO entryDto) {
-            return Ok(await _entityDtoService.UpdateAsync(entryDto));
+            return Ok(await _entityDtoService.AddAsync(entryDto));
         }
     }
 }

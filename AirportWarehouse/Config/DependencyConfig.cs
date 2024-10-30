@@ -1,4 +1,5 @@
-﻿using AirportWarehouse.Core.CustomEntities;
+﻿using AirportWarehouse.Core.DTOs;
+using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.Options;
 using AirportWarehouse.Infrastructure.Helpers;
@@ -17,7 +18,11 @@ namespace AirportWarehouse.Config
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
             services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
             services.AddScoped(typeof(IEntityDtoService<,>), typeof(EntityDtoService<,>));
-            
+            services.AddScoped<IEntityDtoService<Egress, EgressDTO>, EgressService>();
+            services.AddScoped<IEntityDtoService<Entry, EntryDTO>, EntryService>();
+
+
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddTransient<IClaimService, ClaimService>();
@@ -30,10 +35,6 @@ namespace AirportWarehouse.Config
 
             services.AddScoped<IAgentService, AgentService>();
             services.AddScoped<IProductService, ProductService>();
-
-            services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<IInventoryRepository, InventoryRepository>();
-            services.AddScoped<ISupplyService, SupplyService>();
             return services;
         }
     }

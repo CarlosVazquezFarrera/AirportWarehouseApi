@@ -1,6 +1,7 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
 using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
+using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using AirportWarehouse.Infrastructure.Interfaces;
@@ -30,6 +31,25 @@ namespace AirportWarehouse.Infrastructure.Service
             return base.AddAsync(ProductDTO);
         }
 
+        public async Task<SupplyMovement> DecreaseProduct(Guid IdProduct, int WithdrawalAmount)
+        {
+            ProductDTO productDTO = await GetByIdAsync(IdProduct);
+
+            if (WithdrawalAmount > productDTO.Stock)
+                throw new BusinessException("Insufficient stock");
+
+            int QuantityAfter = productDTO.Stock - WithdrawalAmount;
+
+            SupplyMovement supplyMovement = new()
+            {
+                QuantityBefore = productDTO.Stock,
+                QuantityAfter = QuantityAfter
+            };
+            productDTO.Stock = QuantityAfter;
+            await UpdateAsync(productDTO);
+            return supplyMovement;
+
+        }
 
         public PagedResponse<ProductDTO> GetProdcutsByAirport(ProductsFilter parameters)
         {
@@ -51,6 +71,22 @@ namespace AirportWarehouse.Infrastructure.Service
                 .Include(p => p.ProductFormat)
                 .Include(p => p.Presentation);
             return _queryService.FilterAndPaginate(_mapper.Map<IEnumerable<ProductDTO>>(products), filters, parameters.PageNumber,parameters.PageSize);
+        }
+
+        public async Task<SupplyMovement> IncreaseProduct(Guid IdProduct, int QuantityReceived)
+        {
+            ProductDTO productDTO = await GetByIdAsync(IdProduct);
+            int TotalUnitsReceived = productDTO.PresentationQuantity * productDTO.FormatQuantity;
+            int QuantityAfter = productDTO.Stock +  (TotalUnitsReceived * QuantityReceived);
+
+            SupplyMovement supplyMovement = new()
+            {
+                QuantityBefore = productDTO.Stock,
+                QuantityAfter = QuantityAfter
+            };
+            productDTO.Stock = QuantityAfter;
+            await UpdateAsync(productDTO);
+            return supplyMovement;
         }
     }
 }

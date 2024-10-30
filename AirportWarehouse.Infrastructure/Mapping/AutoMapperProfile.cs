@@ -30,11 +30,10 @@ namespace AirportWarehouse.Infrastructure.Mapping
 
 
             CreateMap<ProductDTO, Product>()
-                 .ForMember(dest => dest.AirportId, opt => opt.Ignore())
-                 .ForMember(dest => dest.Stock, opt => opt.Ignore());
+                 .ForMember(dest => dest.AirportId, opt => opt.Ignore());
+                 //.ForMember(dest => dest.Stock, opt => opt.Ignore());
 
 
-            CreateMap<Supply, SupplyDTO>().ReverseMap();
             CreateMap<PackagingType, PackagingTypeDTO>().ReverseMap();
             CreateMap<Presentation, PresentationDTO>().ReverseMap();
             CreateMap<ProductFormat, ProductFormatDTO>().ReverseMap();

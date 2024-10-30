@@ -13,9 +13,9 @@ namespace AirportWarehouse.Core.DTOs
         public int FormatQuantity { get; set; }
         public int Stock { get; set; }
         public Guid AirportId { get; set; }
-        public string PackagingTypeName { get; set; } = null!;
-        public string ProductFormatName { get; set; } = null!;
-        public string PresentationName { get; set; } = null!;
+        public string PackagingTypeName { get; set; } = string.Empty;
+        public string ProductFormatName { get; set; } = string.Empty;
+        public string PresentationName { get; set; } = string.Empty;
 
     }
 }

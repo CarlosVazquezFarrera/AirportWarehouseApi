@@ -25,11 +25,11 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EntryAgent");
 
-            builder.HasOne(d => d.Supply)
+            builder.HasOne(d => d.Product)
                 .WithMany(p => p.Entries)
-                .HasForeignKey(d => d.SupplyId)
+                .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_EntrySupply");
+                .HasConstraintName("FK_EntryProduct");
         }
     }
 
