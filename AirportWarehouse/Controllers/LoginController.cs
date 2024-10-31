@@ -22,9 +22,9 @@ namespace AirportWarehouse.Controllers
         private readonly IMapper _mapper;
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] AgentLogin user)
+        public  IActionResult Login([FromBody] AgentLogin user)
         {
-            AgentDetailInfo exitingAgent = await this._agentRepository.Login(user);
+            AgentDetailInfo exitingAgent = this._agentRepository.Login(user);
 
             var agentInfo = new AgentInfo() {
                 Agent = _mapper.Map<AgentBaseInfo>(exitingAgent),

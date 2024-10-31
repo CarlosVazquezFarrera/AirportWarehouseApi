@@ -5,7 +5,6 @@ using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
@@ -47,14 +46,13 @@ namespace AirportWarehouse.Infrastructure.Service
             return Agents.Where(a => !a.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
         }
 
-        public async Task<AgentDetailInfo> Login(AgentLogin agent)
+        public AgentDetailInfo Login(AgentLogin agent)
         {
-            Agent existingAgent = await _unitOfWork.Repository<Agent>().Include(a => a.AgentPermissions)
+            Agent existingAgent = _unitOfWork.Repository<Agent>().GetAll()
                 .Where(
                     a =>
                     a.AgentNumber.Equals(agent.AgentNumber) &&
-                    a.IsActive &&
-                    a.AgentPermissions.Count != 0).FirstOrDefaultAsync() ?? throw new CredentialsException("Check your credentials");
+                    a.IsActive).FirstOrDefault() ?? throw new CredentialsException("Check your credentials");
             _passwordService.Check(existingAgent.Password, agent.Password);
 
             return _mapper.Map<AgentDetailInfo>(existingAgent);

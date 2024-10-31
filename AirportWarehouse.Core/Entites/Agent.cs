@@ -9,7 +9,7 @@
         public string Email { get; set; } = null!;
         public string Password { get; set; } = string.Empty;
         public bool IsActive { get; set; }
-        public Guid AirportId { get; set; }
+        public Guid? AirportId { get; set; }
         public virtual Airport Airports { get; set; } = null!;
 
         public virtual ICollection<AgentPermission> AgentPermissions { get; set; } = new List<AgentPermission>();

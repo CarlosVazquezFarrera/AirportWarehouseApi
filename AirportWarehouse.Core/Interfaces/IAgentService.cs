@@ -9,6 +9,6 @@ namespace AirportWarehouse.Core.Interfaces
     {
         PagedResponse<AgentDetailInfo> GetPagedAgents(AgentParameters agentParameters);
         IEnumerable<AgentDetailInfo> GetAllAgentsWithoutAdmin();
-        Task<AgentDetailInfo> Login(AgentLogin agent);
+        AgentDetailInfo Login(AgentLogin agent);
     }
 }
