@@ -3,6 +3,6 @@
     public interface IClaimService
     {
         Guid GetUserId();
-        Guid GetAirpotId();
+        Guid GetAirportId();
     }
 }

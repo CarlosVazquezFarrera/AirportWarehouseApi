@@ -29,8 +29,8 @@ namespace AirportWarehouse.Infrastructure.Mapping
 
 
 
-            CreateMap<ProductDTO, Product>()
-                 .ForMember(dest => dest.AirportId, opt => opt.Ignore());
+            CreateMap<ProductDTO, Product>();
+                 //.ForMember(dest => dest.AirportId, opt => opt.Ignore());
                  //.ForMember(dest => dest.Stock, opt => opt.Ignore());
 
 

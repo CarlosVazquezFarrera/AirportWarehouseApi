@@ -21,7 +21,7 @@ namespace AirportWarehouse.Infrastructure.Service
             return Id == null ? throw new CredentialsException() : new Guid(Id);
         }
 
-        public Guid GetAirpotId()
+        public Guid GetAirportId()
         {
             var user = _httpContextAccessor!.HttpContext!.User;
             var airportId = user.FindFirst("AirportId")?.Value ?? throw new CredentialsException();

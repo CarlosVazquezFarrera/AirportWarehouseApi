@@ -6,13 +6,13 @@ namespace AirportWarehouse.Core.Entites
     {
         public string Name { get; set; } = null!;
         public string SupplierPart { get; set; } = null!;
-        public Guid? PackagingTypeId { get; set; }
-        public Guid? PresentationId { get; set; }
+        public Guid PackagingTypeId { get; set; }
+        public Guid PresentationId { get; set; }
         public int PresentationQuantity { get; set; }
-        public Guid? ProductFormatId { get; set; }
+        public Guid ProductFormatId { get; set; }
         public int FormatQuantity { get; set; }
         public int Stock { get; set; }
-        public Guid? AirportId { get; set; }
+        public Guid AirportId { get; set; }
         public virtual PackagingType PackagingType { get; set; } = null!;
         public virtual Presentation Presentation { get; set; } = null!;
         public virtual ProductFormat ProductFormat { get; set; } = null!;

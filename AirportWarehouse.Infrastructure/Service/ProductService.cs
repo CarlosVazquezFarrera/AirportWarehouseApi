@@ -24,11 +24,16 @@ namespace AirportWarehouse.Infrastructure.Service
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-        public override Task<ProductDTO> AddAsync(ProductDTO ProductDTO)
+        public override Task<ProductDTO> AddAsync(ProductDTO productDTO)
         {
-            ProductDTO.AirportId = _claimService.GetAirpotId();
-            ProductDTO.Stock = ProductDTO.FormatQuantity * ProductDTO.PresentationQuantity;
-            return base.AddAsync(ProductDTO);
+            productDTO.AirportId = _claimService.GetAirportId();
+            productDTO.Stock = productDTO.FormatQuantity * productDTO.PresentationQuantity;
+            return base.AddAsync(productDTO);
+        }
+        public override Task<ProductDTO> UpdateAsync(ProductDTO productDTO)
+        {
+            productDTO.AirportId = _claimService.GetAirportId();
+            return base.UpdateAsync(productDTO);
         }
 
         public async Task<SupplyMovement> DecreaseProduct(Guid IdProduct, int WithdrawalAmount)
@@ -53,7 +58,7 @@ namespace AirportWarehouse.Infrastructure.Service
 
         public PagedResponse<ProductDTO> GetProdcutsByAirport(ProductsFilter parameters)
         {
-            Guid airportId = parameters.AirportId == Guid.Empty ? _claimService.GetAirpotId() : parameters.AirportId;
+            Guid airportId = parameters.AirportId == Guid.Empty ? _claimService.GetAirportId() : parameters.AirportId;
             var filters = new List<Expression<Func<ProductDTO, bool>>>()
             {
                 p => p.AirportId.Equals(airportId),
