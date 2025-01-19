@@ -20,7 +20,7 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                 .HasColumnType("timestamp");
 
             builder.HasOne(d => d.Approver)
-                .WithMany(p => p.EgressApprovers)
+                .WithMany(p => p.Egresses)
                 .HasForeignKey(d => d.ApproverId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EgressApprover");

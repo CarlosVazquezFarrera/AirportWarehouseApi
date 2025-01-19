@@ -14,9 +14,7 @@
 
         public virtual ICollection<AgentPermission> AgentPermissions { get; set; } = new List<AgentPermission>();
 
-        public virtual ICollection<Egress> EgressApprovers { get; set; } = new List<Egress>();
-
-        public virtual ICollection<Egress> EgressPetitioners { get; set; } = new List<Egress>();
+        public virtual ICollection<Egress> Egresses { get; set; } = new List<Egress>();
 
         public virtual ICollection<Entry> Entries { get; set; } = new List<Entry>();
     }
