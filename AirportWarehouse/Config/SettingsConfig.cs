@@ -1,7 +1,4 @@
-﻿using AirportWarehouse.Infrastructure.Interfaces;
-using AirportWarehouse.Infrastructure.Service;
-using Microsoft.Extensions.Configuration;
-using System.Runtime;
+﻿using AirportWarehouse.Infrastructure.Service;
 
 namespace AirportWarehouse.Config
 {

@@ -29,13 +29,13 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                 .WithMany(p => p.Egresses)
                 .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull) 
-                .HasConstraintName("FK_EgressProduct"); 
+                .HasConstraintName("FK_EgressProduct");
 
-            builder.HasOne(d => d.Petitioner)
-                .WithMany(p => p.EgressPetitioners)
-                .HasForeignKey(d => d.PetitionerId)
-                .OnDelete(DeleteBehavior.ClientSetNull) 
-                .HasConstraintName("FK_EgressPetitioner");
+            builder.HasOne(d => d.Department)
+                .WithMany(p => p.Egresses)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EgressDepartment");
         }
 
     }

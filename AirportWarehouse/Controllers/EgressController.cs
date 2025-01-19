@@ -1,5 +1,4 @@
 ﻿using AirportWarehouse.Core.DTOs;
-using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +10,25 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class EgressController : ControllerBase
     {
-        public EgressController(IEntityDtoService<Egress, EgressDTO> entityDtoService)
+        public EgressController(IEgressService egressService)
         {
-            _entityDtoService = entityDtoService;
+            _egressService = egressService;
         }
 
-        private readonly IEntityDtoService<Egress, EgressDTO> _entityDtoService;
+        private readonly IEgressService _egressService;
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]EgressDTO egress) {
-            return Ok(await _entityDtoService.AddAsync(egress));
+        public async Task<IActionResult> Create([FromBody] IEnumerable<EgressDTO> egresses) {
+            try
+            {
+                return Ok(await _egressService.CreateEgressOrder(egresses));
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
+        
     }
 }

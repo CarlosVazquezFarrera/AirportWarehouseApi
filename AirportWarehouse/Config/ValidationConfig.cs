@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using AirportWarehouse.Infrastructure.Validations;
+using FluentValidation;
 using FluentValidation.AspNetCore;
 
 namespace AirportWarehouse.Config
@@ -7,10 +8,10 @@ namespace AirportWarehouse.Config
     {
         public static IServiceCollection AddValidationConfig(this IServiceCollection services)
         {
-            services.AddFluentValidationAutoValidation();
-            services.AddFluentValidationAutoValidation();
+            
             services.AddFluentValidationClientsideAdapters();
             services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddFluentValidationAutoValidation();
             return services;
         }
     }

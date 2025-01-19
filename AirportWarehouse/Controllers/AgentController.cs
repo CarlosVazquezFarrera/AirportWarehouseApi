@@ -12,12 +12,14 @@ namespace AirportWarehouse.Controllers
     [Authorize]
     public class AgentController : ControllerBase
     {
-        public AgentController(IAgentService agentService)
+        public AgentController(IAgentService agentService, IPasswordService passwordService)
         {
             _agentService = agentService;
+            _passwordService = passwordService; 
         }
 
         private readonly IAgentService _agentService;
+        private readonly IPasswordService _passwordService;
 
 
         [HttpGet]
@@ -40,6 +42,11 @@ namespace AirportWarehouse.Controllers
         public async Task<IActionResult> Update([FromBody] AgentEditableInfo agentDTO)
         {
             return Ok(await _agentService.UpdateAsync(agentDTO));
+        }
+        [HttpPatch]
+        public IActionResult ChangePasword([FromBody] string Pass)
+        {
+            return Ok(_passwordService.Hash(Pass));
         }
     }
     

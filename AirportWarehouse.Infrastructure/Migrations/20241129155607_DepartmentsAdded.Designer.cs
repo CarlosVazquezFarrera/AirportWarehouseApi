@@ -3,6 +3,7 @@ using System;
 using AirportWarehouse.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AirportWarehouse.Infrastructure.Migrations
 {
     [DbContext(typeof(AirportwarehouseContext))]
-    partial class AirportwarehouseContextModelSnapshot : ModelSnapshot
+    [Migration("20241129155607_DepartmentsAdded")]
+    partial class DepartmentsAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,9 +142,6 @@ namespace AirportWarehouse.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("uuid_generate_v4()");
 
-                    b.Property<Guid?>("AgentId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("AmountRemoved")
                         .HasColumnType("integer");
 
@@ -156,6 +156,9 @@ namespace AirportWarehouse.Infrastructure.Migrations
                     b.Property<Guid?>("DepartmentId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("PetitionerId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
@@ -168,11 +171,11 @@ namespace AirportWarehouse.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK_Egress_Id");
 
-                    b.HasIndex("AgentId");
-
                     b.HasIndex("ApproverId");
 
                     b.HasIndex("DepartmentId");
+
+                    b.HasIndex("PetitionerId");
 
                     b.HasIndex("ProductId");
 
@@ -368,10 +371,6 @@ namespace AirportWarehouse.Infrastructure.Migrations
 
             modelBuilder.Entity("AirportWarehouse.Core.Entites.Egress", b =>
                 {
-                    b.HasOne("AirportWarehouse.Core.Entites.Agent", null)
-                        .WithMany("EgressPetitioners")
-                        .HasForeignKey("AgentId");
-
                     b.HasOne("AirportWarehouse.Core.Entites.Agent", "Approver")
                         .WithMany("EgressApprovers")
                         .HasForeignKey("ApproverId")
@@ -383,6 +382,12 @@ namespace AirportWarehouse.Infrastructure.Migrations
                         .HasForeignKey("DepartmentId")
                         .HasConstraintName("FK_EgressDepartment");
 
+                    b.HasOne("AirportWarehouse.Core.Entites.Agent", "Petitioner")
+                        .WithMany("EgressPetitioners")
+                        .HasForeignKey("PetitionerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("AirportWarehouse.Core.Entites.Product", "Product")
                         .WithMany("Egresses")
                         .HasForeignKey("ProductId")
@@ -392,6 +397,8 @@ namespace AirportWarehouse.Infrastructure.Migrations
                     b.Navigation("Approver");
 
                     b.Navigation("Department");
+
+                    b.Navigation("Petitioner");
 
                     b.Navigation("Product");
                 });

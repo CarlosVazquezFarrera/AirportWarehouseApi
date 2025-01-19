@@ -7,6 +7,8 @@ using AirportWarehouse.Infrastructure.Interfaces;
 using AirportWarehouse.Infrastructure.Options;
 using AirportWarehouse.Infrastructure.Repositories;
 using AirportWarehouse.Infrastructure.Service;
+using AirportWarehouse.Infrastructure.Validations;
+using FluentValidation;
 
 namespace AirportWarehouse.Config
 {
@@ -18,8 +20,8 @@ namespace AirportWarehouse.Config
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepositoty<>));
             services.AddScoped(typeof(IPagedListService<>), typeof(PagedListService<>));
             services.AddScoped(typeof(IEntityDtoService<,>), typeof(EntityDtoService<,>));
-            services.AddScoped<IEntityDtoService<Egress, EgressDTO>, EgressService>();
             services.AddScoped<IEntityDtoService<Entry, EntryDTO>, EntryService>();
+            services.AddScoped<IEgressService, EgressService>();
 
 
 
@@ -35,6 +37,7 @@ namespace AirportWarehouse.Config
 
             services.AddScoped<IAgentService, AgentService>();
             services.AddScoped<IProductService, ProductService>();
+
             return services;
         }
     }

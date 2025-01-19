@@ -48,6 +48,7 @@ public partial class AirportwarehouseContext : DbContext
         modelBuilder.ApplyConfiguration(new ProductConfiguration());
 
         modelBuilder.ApplyConfiguration(new ProductFormatConfiguration());
+        modelBuilder.ApplyConfiguration(new DepartamentConfiguration());
 
         OnModelCreatingPartial(modelBuilder);
     }

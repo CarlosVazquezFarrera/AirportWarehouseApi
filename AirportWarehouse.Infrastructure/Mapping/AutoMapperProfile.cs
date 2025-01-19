@@ -27,8 +27,6 @@ namespace AirportWarehouse.Infrastructure.Mapping
                 .ForMember(dest => dest.ProductFormatName, opt => opt.MapFrom(src => src.ProductFormat.Name))
                 .ForMember(dest => dest.PresentationName, opt => opt.MapFrom(src => src.Presentation.Name));
 
-
-
             CreateMap<ProductDTO, Product>();
                  //.ForMember(dest => dest.AirportId, opt => opt.Ignore());
                  //.ForMember(dest => dest.Stock, opt => opt.Ignore());
@@ -37,6 +35,7 @@ namespace AirportWarehouse.Infrastructure.Mapping
             CreateMap<PackagingType, PackagingTypeDTO>().ReverseMap();
             CreateMap<Presentation, PresentationDTO>().ReverseMap();
             CreateMap<ProductFormat, ProductFormatDTO>().ReverseMap();
+            CreateMap<Department, DepartmentDTO>().ReverseMap();
         }
     }
 }

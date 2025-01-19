@@ -13,7 +13,7 @@ namespace AirportWarehouse.Infrastructure.Validations
             if (context.Exception.GetType() == typeof(BusinessException))
             {
                 var exception = (BusinessException)context.Exception;
-                var validation = GenerateError((int)HttpStatusCode.BadRequest, "Bad Request");
+                var validation = GenerateError((int)HttpStatusCode.BadRequest, exception.Message?? "Bad Request");
                 HandleException(context, validation);
             }
             else if (context.Exception.GetType() == typeof(CredentialsException))

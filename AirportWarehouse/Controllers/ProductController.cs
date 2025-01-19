@@ -19,7 +19,7 @@ namespace AirportWarehouse.Controllers
 
         private readonly IProductService _productService;
 
-        [HttpGet("GetByAirport")]
+        [HttpGet("GetProductsPagedByAirport")]
         public IActionResult GetAll([FromQuery] ProductsFilter parameters)
         {
             return Ok(_productService.GetProdcutsByAirport(parameters));
