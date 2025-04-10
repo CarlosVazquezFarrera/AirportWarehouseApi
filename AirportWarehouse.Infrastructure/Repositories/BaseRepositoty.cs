@@ -27,7 +27,7 @@ namespace AirportWarehouse.Infrastructure.Repositories
 
         public IEnumerable<T> GetAll()
         {
-            return _entity.AsNoTracking().AsQueryable();
+            return _entity.AsNoTracking();
         }
 
         public async Task<T> GetById(Guid Id)

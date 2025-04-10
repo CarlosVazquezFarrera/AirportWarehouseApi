@@ -2,8 +2,10 @@
 
 namespace AirportWarehouse.Core.DTOs
 {
-    public class AgentDTO : AgentEditableInfo
+    public class AgentDTO : EditableAgentInfo
     {
         public bool IsActive { get; set; }
+        public string Password { get; set; } = string.Empty;
+
     }
 }

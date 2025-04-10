@@ -1,4 +1,5 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
@@ -8,9 +9,9 @@ using AutoMapper;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
-    public class AgentService : EntityDtoService<Agent, AgentDetailInfo>, IAgentService
+    public class AgentService : EntityDtoService<Agent, AgentDTO>, IAgentService
     {
-        public AgentService(IUnitOfWork unitOfWork, IMapper mapper, IPagedListService<AgentDetailInfo> pagedListService, IPasswordService passwordService) : base(mapper, unitOfWork, pagedListService)
+        public AgentService(IUnitOfWork unitOfWork, IMapper mapper, IPagedListService<AgentDTO> pagedListService, IPasswordService passwordService) : base(mapper, unitOfWork, pagedListService)
         {
             _pagedListService = pagedListService;
             _passwordService = passwordService;
@@ -18,19 +19,19 @@ namespace AirportWarehouse.Infrastructure.Service
             _mapper = mapper;
         }
 
-        private readonly IPagedListService<AgentDetailInfo> _pagedListService;
+        private readonly IPagedListService<AgentDTO> _pagedListService;
         private readonly IPasswordService _passwordService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        private IEnumerable<AgentDetailInfo> Agents
+        private IEnumerable<AgentDTO> Agents
         {
             get { 
-                return 
-                   GetAll(); 
+
+                return _mapper.Map<IEnumerable<AgentDTO>>(GetAll());
             }
         }
 
-        public PagedResponse<AgentDetailInfo> GetPagedAgents(AgentParameters agentParameters)
+        public PagedResponse<AgentDTO> GetPagedAgents(AgentParameters agentParameters)
         {
             var agents = GetAllAgentsWithoutAdmin();
             if (!String.IsNullOrEmpty(agentParameters.Search))
@@ -38,15 +39,15 @@ namespace AirportWarehouse.Infrastructure.Service
                 agents = agents.Where(a => a.Name.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase)
                 || a.AgentNumber.Contains(agentParameters.Search, StringComparison.CurrentCultureIgnoreCase));
             }
-            var pagedResponse = _pagedListService.Paginate(agents, agentParameters.PageNumber, agentParameters.PageSize);
+            var pagedResponse = _pagedListService.Paginate(Agents, agentParameters.PageNumber, agentParameters.PageSize);
             return pagedResponse;
         }
-        public IEnumerable<AgentDetailInfo> GetAllAgentsWithoutAdmin()
+        public IEnumerable<AgentDTO> GetAllAgentsWithoutAdmin()
         {
             return Agents.Where(a => !a.Name.Equals("Administrador", StringComparison.OrdinalIgnoreCase));
         }
-
-        public AgentDetailInfo Login(AgentLogin agent)
+      
+        public AgentDTO Login(AgentLogin agent)
         {
             Agent existingAgent = _unitOfWork.Repository<Agent>().GetAll()
                 .Where(
@@ -55,7 +56,13 @@ namespace AirportWarehouse.Infrastructure.Service
                     a.IsActive).FirstOrDefault() ?? throw new CredentialsException("Check your credentials");
             _passwordService.Check(existingAgent.Password, agent.Password);
 
-            return _mapper.Map<AgentDetailInfo>(existingAgent);
+            return _mapper.Map<AgentDTO>(existingAgent);
+        }
+
+        public override Task<AgentDTO> AddAsync(AgentDTO DtoEntity)
+        {
+            DtoEntity.Password = _passwordService.Hash(DtoEntity.Password);
+            return base.AddAsync(DtoEntity);
         }
     }
 }

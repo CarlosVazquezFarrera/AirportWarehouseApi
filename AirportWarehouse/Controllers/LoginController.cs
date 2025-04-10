@@ -1,4 +1,5 @@
 ﻿using AirportWarehouse.Core.CustomEntities;
+using AirportWarehouse.Core.DTOs;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
@@ -24,10 +25,10 @@ namespace AirportWarehouse.Controllers
         [HttpPost]
         public  IActionResult Login([FromBody] AgentLogin user)
         {
-            AgentDetailInfo exitingAgent = this._agentRepository.Login(user);
+            var exitingAgent = this._agentRepository.Login(user);
 
             var agentInfo = new AgentInfo() {
-                Agent = _mapper.Map<AgentBaseInfo>(exitingAgent),
+                Agent = _mapper.Map<AgentDTO>(exitingAgent),
                 Token = _jwt.GetJwtToken(exitingAgent.Name, 
                 exitingAgent.Email, 
                 exitingAgent.Id,

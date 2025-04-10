@@ -5,10 +5,10 @@ using AirportWarehouse.Core.QueryFilter;
 
 namespace AirportWarehouse.Core.Interfaces
 {
-    public interface IAgentService : IEntityDtoService<Agent, AgentDetailInfo>
+    public interface IAgentService : IEntityDtoService<Agent, AgentDTO>
     {
-        PagedResponse<AgentDetailInfo> GetPagedAgents(AgentParameters agentParameters);
-        IEnumerable<AgentDetailInfo> GetAllAgentsWithoutAdmin();
-        AgentDetailInfo Login(AgentLogin agent);
+        PagedResponse<AgentDTO> GetPagedAgents(AgentParameters agentParameters);
+        IEnumerable<AgentDTO> GetAllAgentsWithoutAdmin();
+        AgentDTO Login(AgentLogin agent);
     }
 }
