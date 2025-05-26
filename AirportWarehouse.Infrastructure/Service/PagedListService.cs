@@ -21,5 +21,12 @@ namespace AirportWarehouse.Infrastructure.Service
             int size = pageSize ?? _options.DefaultPageSize;
             return new PagedResponse<T>(_mapper.Map<IEnumerable<T>>(data), page, size);
         }
+
+        public PagedResponse<T> PaginateFromIQueryable(IQueryable<T> data, int? pageNumber, int? pageSize)
+        {
+            int page = pageNumber ?? _options.DefaultPageNumber;
+            int size = pageSize ?? _options.DefaultPageSize;
+            return new PagedResponse<T>(_mapper.Map<IQueryable<T>>(data), page, size);
+        }
     }
 }

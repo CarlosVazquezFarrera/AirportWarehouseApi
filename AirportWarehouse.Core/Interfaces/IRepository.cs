@@ -1,4 +1,5 @@
 ﻿using AirportWarehouse.Core.Entites;
+using AirportWarehouse.Core.ExtentionEntities;
 using System.Linq.Expressions;
 
 namespace AirportWarehouse.Core.Interfaces
@@ -12,5 +13,6 @@ namespace AirportWarehouse.Core.Interfaces
         void Update(T entity);
         Task<T?> GetByCondition(Expression<Func<T, bool>> predicate);
         IQueryable<T> Include(params Expression<Func<T, object>>[] includes);
+        IQueryable<T> GetPagedFilter(List<Expression<Func<T, bool>>> filters, params Expression<Func<T, object>>[] includes);
     }
 }

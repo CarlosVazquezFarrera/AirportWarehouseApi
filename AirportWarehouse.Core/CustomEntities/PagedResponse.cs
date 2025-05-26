@@ -9,7 +9,11 @@ namespace AirportWarehouse.Core.CustomEntities
             Data = new PagedList<T>(items, pageNumber, pageSize);
             Metadata = new Metadata<T>(Data, items.Count());
         }
-
+        public PagedResponse(IQueryable<T> items, int pageNumber, int pageSize)
+        {
+            Data = new PagedList<T>(items, pageNumber, pageSize);
+            Metadata = new Metadata<T>(Data, items.Count());
+        }
         public PagedList<T> Data { get; set; }
         public Metadata<T> Metadata { get; set; }
 

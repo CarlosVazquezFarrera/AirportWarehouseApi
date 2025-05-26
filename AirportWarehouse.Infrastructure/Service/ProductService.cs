@@ -6,7 +6,6 @@ using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Core.QueryFilter;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace AirportWarehouse.Infrastructure.Service
@@ -59,23 +58,33 @@ namespace AirportWarehouse.Infrastructure.Service
         public PagedResponse<ProductDTO> GetProdcutsByAirport(ProductsFilter parameters)
         {
             Guid airportId = parameters.AirportId == Guid.Empty ? _claimService.GetAirportId() : parameters.AirportId;
-            var filters = new List<Expression<Func<ProductDTO, bool>>>()
+            var filters = new List<Expression<Func<Product, bool>>>()
             {
                 p => p.AirportId.Equals(airportId),
             };
 
-            if (!String.IsNullOrEmpty(parameters.Search))
+            if (!string.IsNullOrEmpty(parameters.Search))
             {
+                string searchLower = parameters.Search.ToLower();
+
                 filters.Add(
-                    p=> p.Name.Contains(parameters.Search, StringComparison.CurrentCultureIgnoreCase) ||
-                p.SupplierPart!.Contains(parameters.Search, StringComparison.CurrentCultureIgnoreCase));
+                    p => p.Name.ToLower().Contains(searchLower) ||
+                    p.SupplierPart!.ToLower().Contains(searchLower));
             }
 
-            IEnumerable<Product> products = _unitOfWork.Repository<Product>()
-                .Include(p => p.PackagingType)
-                .Include(p => p.ProductFormat)
-                .Include(p => p.Presentation);
-            return _queryService.FilterAndPaginate(_mapper.Map<IEnumerable<ProductDTO>>(products), filters, parameters.PageNumber,parameters.PageSize);
+            if (parameters.CategoryId != Guid.Empty)
+            {
+                filters.Add(p => p.CategoryId.Equals(parameters.CategoryId));
+            }
+            if (parameters.ProductFormatId != Guid.Empty)
+            {
+                filters.Add(p => p.ProductFormatId.Equals(parameters.ProductFormatId));
+            }
+
+
+            return GetPagedWithSearch(parameters.PageNumber, parameters.PageSize, filters, 
+                p => p.PackagingType, p => p.ProductFormat, p => p.Presentation, p => p.Category);
+
         }
 
         public async Task<SupplyMovement> IncreaseProduct(Guid IdProduct, int QuantityReceived)

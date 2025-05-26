@@ -9,7 +9,7 @@ namespace AirportWarehouse.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ProductController : ControllerBase
     {
         public ProductController(IProductService productService)

@@ -5,6 +5,7 @@ using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Interfaces;
 using AutoMapper;
+using System.Linq.Expressions;
 
 namespace AirportWarehouse.Infrastructure.Service
 {
@@ -54,5 +55,12 @@ namespace AirportWarehouse.Infrastructure.Service
         {
             return _pagedListService.Paginate(GetAll(), pageNumber, pageSize);
         }
+
+        public PagedResponse<TDto> GetPagedWithSearch(int? pageNumber, int? pageSize, List<Expression<Func<TEntity, bool>>> filters, params Expression<Func<TEntity, object>>[] includes)
+        {
+            var entities = _unitOfWork.Repository<TEntity>().GetPagedFilter(filters, includes);
+            return _pagedListService.Paginate(_mapper.Map<IEnumerable<TDto>>(entities), pageNumber, pageSize);
+        }
+
     }
 }

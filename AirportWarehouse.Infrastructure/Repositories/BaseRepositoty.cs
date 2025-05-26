@@ -1,4 +1,5 @@
 ﻿using AirportWarehouse.Core.Entites;
+using AirportWarehouse.Core.ExtentionEntities;
 using AirportWarehouse.Core.Interfaces;
 using AirportWarehouse.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -61,6 +62,22 @@ namespace AirportWarehouse.Infrastructure.Repositories
             }
 
             return query.AsQueryable();
+        }
+
+        public IQueryable<T> GetPagedFilter(List<Expression<Func<T, bool>>> filters, params Expression<Func<T, object>>[] includes)
+        {
+            var query = _entity.AsQueryable();
+            foreach (var filter in filters)
+            {
+                query = query.Where(filter);
+
+            }
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            return query;
         }
     }
 }
