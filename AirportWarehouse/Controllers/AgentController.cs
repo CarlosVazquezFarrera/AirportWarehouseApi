@@ -38,12 +38,12 @@ namespace AirportWarehouse.Controllers
         {
             return Ok(await _agentService.AddAsync(agentDTO));
         }
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] EditableAgentInfo agentDTO)
-        {
-            return Ok();
-            //return Ok(await _agentService.UpdateAsync(agentDTO));
-        }
+        //[HttpPut]
+        //public async Task<IActionResult> Update([FromBody] EditableAgentInfo agentDTO)
+        //{
+        //    return Ok();
+        //    //return Ok(await _agentService.UpdateAsync(agentDTO));
+        //}
         [HttpPatch]
         public IActionResult ChangePasword([FromBody] string Pass)
         {

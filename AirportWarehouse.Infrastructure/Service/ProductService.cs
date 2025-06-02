@@ -72,13 +72,17 @@ namespace AirportWarehouse.Infrastructure.Service
                     p.SupplierPart!.ToLower().Contains(searchLower));
             }
 
-            if (parameters.CategoryId != Guid.Empty)
+            if (!parameters.CategoryId.Equals(Guid.Empty))
             {
                 filters.Add(p => p.CategoryId.Equals(parameters.CategoryId));
             }
-            if (parameters.ProductFormatId != Guid.Empty)
+            if (!parameters.ProductFormatId.Equals(Guid.Empty))
             {
                 filters.Add(p => p.ProductFormatId.Equals(parameters.ProductFormatId));
+            }
+            if (!parameters.PackagingTypeId.Equals(Guid.Empty))
+            {
+                filters.Add(p => p.PackagingTypeId.Equals(parameters.PackagingTypeId));
             }
 
 
