@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
+builder.Services.AddHealthChecks();
 
 builder.Services.AddConfigSettings(builder.Configuration);
 
@@ -15,7 +16,7 @@ builder.Services.AddCors(options =>
                       policy =>
                       {
                           policy
-                          .WithOrigins("http://localhost:4200",
+                          .WithOrigins("http://localhost:4200/",
                           "https://airportwarehouse.vercel.app")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
@@ -60,6 +61,7 @@ var app = builder.Build();
 //}
 
 
+app.MapHealthChecks("/health");
 
 app.UseHttpsRedirection();
 

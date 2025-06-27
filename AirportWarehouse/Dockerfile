@@ -12,6 +12,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
 COPY ["AirportWarehouse/AirportWarehouse.csproj", "AirportWarehouse/"]
 COPY ["AirportWarehouse.Core/AirportWarehouse.Core.csproj", "AirportWarehouse.Core/"]
 COPY ["AirportWarehouse.Infrastructure/AirportWarehouse.Infrastructure.csproj", "AirportWarehouse.Infrastructure/"]
@@ -28,5 +29,9 @@ RUN dotnet publish "./AirportWarehouse.csproj" -c $BUILD_CONFIGURATION -o /app/p
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
+USER root
+RUN apt-get update && apt-get install -y curl
 COPY --from=publish /app/publish .
+USER app
+
 ENTRYPOINT ["dotnet", "AirportWarehouse.dll"]
