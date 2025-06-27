@@ -20,7 +20,8 @@ builder.Services.AddCors(options =>
                               "http://localhost:4200",
                               "http://localhost:80",
                               "http://localhost",
-                              "http://137.184.230.117"
+                              "http://137.184.230.117",
+                              "http://airportwarehouse.com.mx"
                            )
                           .AllowAnyHeader()
                           .AllowAnyMethod();
