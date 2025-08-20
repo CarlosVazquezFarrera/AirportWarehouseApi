@@ -22,7 +22,8 @@ builder.Services.AddCors(options =>
                               "http://localhost",
                               "http://137.184.230.117",
                               "http://airportwarehouse.com.mx",
-                              "https://airportwarehouse.com.mx"
+                              "https://airportwarehouse.com.mx",
+                              "https://airportwarehouse.vercel.app"
                            )
                           .AllowAnyHeader()
                           .AllowAnyMethod();
