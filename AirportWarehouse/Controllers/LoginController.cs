@@ -1,8 +1,5 @@
-﻿using AirportWarehouse.Core.CustomEntities;
-using AirportWarehouse.Core.DTOs;
-using AirportWarehouse.Core.Interfaces;
+﻿using AirportWarehouse.Core.Request;
 using AirportWarehouse.Infrastructure.Interfaces;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AirportWarehouse.Controllers
@@ -11,31 +8,19 @@ namespace AirportWarehouse.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        public LoginController(IJwtBearer jwt, IAgentService agentRepository, IMapper mapper)
+        public LoginController(ILoginService loginService)
         {
-            _agentRepository = agentRepository;
-            _jwt = jwt;
-            _mapper = mapper;
+           _loginService = loginService;
         }
 
-        private readonly IJwtBearer _jwt;
-        private readonly IAgentService _agentRepository;
-        private readonly IMapper _mapper;
+        private readonly ILoginService _loginService;
+
 
         [HttpPost]
-        public  IActionResult Login([FromBody] AgentLogin user)
+        public async Task<IActionResult> Login([FromBody] LoginRequest user)
         {
-            var exitingAgent = this._agentRepository.Login(user);
-
-            var agentInfo = new AgentInfo() {
-                Agent = _mapper.Map<AgentDTO>(exitingAgent),
-                Token = _jwt.GetJwtToken(exitingAgent.Name, 
-                exitingAgent.Email, 
-                exitingAgent.Id,
-                exitingAgent.AirportId)
-            };
-
-            return Ok(agentInfo);
+            var existingAgent = await _loginService.Login(user);
+            return existingAgent is null ? NotFound() : Ok(existingAgent);
         }
     }
 }

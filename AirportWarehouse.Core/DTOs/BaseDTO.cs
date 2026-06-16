@@ -1,7 +1,6 @@
-﻿namespace AirportWarehouse.Core.DTOs
+﻿namespace AirportWarehouse.Core.Dtos;
+
+public class BaseDto
 {
-    public class BaseDTO
-    {
-        public Guid Id { get; set; }
-    }
+    public Guid Id { get; set; }
 }

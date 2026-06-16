@@ -1,26 +1,13 @@
-﻿using AirportWarehouse.Core.DTOs;
+﻿using AirportWarehouse.Core.Dtos;
 using AirportWarehouse.Core.Entites;
-using AirportWarehouse.Core.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using AirportWarehouse.Infrastructure.Interfaces.ServiceInterfaces;
 
 namespace AirportWarehouse.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class PackagingTypeController : ControllerBase
+    public class PackagingTypeController : GenericGetController<PackagingType, PackagingTypeDto>
     {
-        public PackagingTypeController(IEntityDtoService<PackagingType, PackagingTypeDTO> packagingType)
+        public PackagingTypeController(IGenericService<PackagingType, PackagingTypeDto> service) : base(service)
         {
-            _packagingType = packagingType;
-        }
-
-        private readonly IEntityDtoService<PackagingType, PackagingTypeDTO> _packagingType;
-
-        [HttpGet]
-        public IActionResult Get() {
-            return Ok( _packagingType.GetAll());
         }
     }
 }

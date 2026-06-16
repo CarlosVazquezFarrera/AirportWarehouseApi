@@ -1,6 +1,6 @@
-﻿namespace AirportWarehouse.Core.DTOs
+﻿namespace AirportWarehouse.Core.Dtos
 {
-    public class PermissionDTO : BaseDTO
+    public class PermissionDTO : BaseDto
     {
         public string Name { get; set; } = null!;
     }

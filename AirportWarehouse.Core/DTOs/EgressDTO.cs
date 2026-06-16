@@ -1,6 +1,6 @@
-﻿namespace AirportWarehouse.Core.DTOs
+﻿namespace AirportWarehouse.Core.Dtos
 {
-    public class EgressDTO : BaseDTO
+    public class EgressDto : BaseDto
     {
         public int AmountRemoved { get; set; }
         public int QuantityBefore { get; set; }

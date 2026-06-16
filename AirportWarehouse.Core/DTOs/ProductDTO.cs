@@ -1,8 +1,6 @@
-﻿using AirportWarehouse.Core.CustomEntities;
-
-namespace AirportWarehouse.Core.DTOs
+﻿namespace AirportWarehouse.Core.Dtos
 {
-    public class ProductDTO : BaseDTO
+    public class ProductDto : BaseDto
     {
         public string Name { get; set; } = null!;
         public string SupplierPart { get; set; } = null!;
@@ -18,6 +16,5 @@ namespace AirportWarehouse.Core.DTOs
         public string ProductFormatName { get; set; } = string.Empty;
         public string PresentationName { get; set; } = string.Empty;
         public string CategoryName { get; set; } = string.Empty;
-
     }
 }

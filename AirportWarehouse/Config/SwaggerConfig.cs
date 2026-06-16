@@ -1,4 +1,5 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.Options;
+using NSwag;
 
 namespace AirportWarehouse.Config
 {
@@ -6,33 +7,25 @@ namespace AirportWarehouse.Config
     {
         public static IServiceCollection AddSwaggerConfig(this IServiceCollection services)
         {
-
-            services.AddSwaggerGen(opt =>
+            services.AddOpenApiDocument(options =>
             {
-                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+
+                options.AddSecurity("Bearer", new OpenApiSecurityScheme
                 {
-                    In = ParameterLocation.Header,
-                    Description = "Please enter token",
+                    Description = "Bearer token authorization header",
+                    Type = OpenApiSecuritySchemeType.Http,
+                    In = OpenApiSecurityApiKeyLocation.Header,
                     Name = "Authorization",
-                    Type = SecuritySchemeType.Http,
-                    BearerFormat = "JWT",
-                    Scheme = "bearer"
+                    Scheme = "Bearer"
                 });
-
-                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
+                options.PostProcess = document =>
                 {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
+                    document.Info = new OpenApiInfo
+                    {
+                        Version = "v1",
+                        Title = "Warehouse API"
+                    };
+                };
             });
             return services;
         }

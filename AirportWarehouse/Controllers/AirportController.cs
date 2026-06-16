@@ -1,28 +1,12 @@
-﻿using AirportWarehouse.Core.DTOs;
+﻿using AirportWarehouse.Core.Dtos;
 using AirportWarehouse.Core.Entites;
-using AirportWarehouse.Core.Interfaces;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-
+using AirportWarehouse.Infrastructure.Interfaces.ServiceInterfaces; 
 namespace AirportWarehouse.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class AirportController : ControllerBase
+    public class AirportController : GenericGetController<Airport, AirportDto>
     {
-        public AirportController(IEntityDtoService<Airport, AirportDTO> airportService)
+        public AirportController(IGenericService<Airport, AirportDto> service) : base(service)
         {
-            _airportService = airportService;
-        }
-
-        private readonly IEntityDtoService<Airport, AirportDTO> _airportService;
-
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            return Ok(_airportService.GetAll());
         }
     }
 }
