@@ -1,11 +1,10 @@
 ﻿
 using AirportWarehouse.Core.Dtos;
 using AirportWarehouse.Core.Entites;
-using AirportWarehouse.Utils.Mapper;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace AirportWarehouseAdminApi.Utils.Mapper
+namespace AirportWarehouse.Utils.Mapper
 {
     public class MappingProfile<TEntity, TDto> : IGenericMapper<TEntity, TDto> where TEntity : BaseEntity where TDto : BaseDto
     {
@@ -171,9 +170,19 @@ namespace AirportWarehouseAdminApi.Utils.Mapper
         }
 
         private static string GetMemberName<T, TProp>(Expression<Func<T, TProp>> expr)
-            => expr.Body is MemberExpression m
-            ? m.Member.Name
-            : throw new ArgumentException("La expresión debe ser un acceso a propiedad: x => x.Propiedad");
+        {
+            Expression body = expr.Body;
+
+            if (body is UnaryExpression u &&
+                (u.NodeType == ExpressionType.Convert || u.NodeType == ExpressionType.ConvertChecked))
+            {
+                body = u.Operand;
+            }
+
+            if (body is MemberExpression m)
+                return m.Member.Name;
+            throw new ArgumentException("La expresión debe ser un acceso a propiedad: x => x.Propiedad");
+        }
 
 
         private Dictionary<string, string> BuildPropertyNameMap()

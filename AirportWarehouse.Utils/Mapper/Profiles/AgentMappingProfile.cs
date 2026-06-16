@@ -1,7 +1,6 @@
 ﻿using AirportWarehouse.Core.Dtos;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Utils.Helpers.Jwt;
-using AirportWarehouseAdminApi.Utils.Mapper;
 
 namespace AirportWarehouse.Utils.Mapper.Profiles
 {
@@ -9,7 +8,8 @@ namespace AirportWarehouse.Utils.Mapper.Profiles
     {
         public AgentMappingProfile(IJwtBearerHelper jwtBearerHelper)
         {
-            Map(dto => dto.Token, entity => jwtBearerHelper.GetJwtToken(entity.Name, entity.Email, entity.Id, entity.AirportId ?? Guid.Empty));
+            IgnoreOnToDto(dto => dto.Id);
+            Map(dto => dto.Token, entity => jwtBearerHelper.GetJwtToken(entity.Name, entity.Email, entity.Id, entity.AirportId!.Value));
         }
 
     }
