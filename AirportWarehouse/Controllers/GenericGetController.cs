@@ -1,4 +1,5 @@
-﻿using AirportWarehouse.Core.Dtos;
+﻿using AirportWarehouse.ControllerConfig;
+using AirportWarehouse.Core.Dtos;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.ParamerEntities;
 using AirportWarehouse.Infrastructure.Interfaces.ServiceInterfaces;
@@ -10,7 +11,7 @@ namespace AirportWarehouse.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public abstract class GenericGetController <TEntity, TDto> : ControllerBase where TDto : BaseDto where TEntity : BaseEntity
     {
         protected GenericGetController(IGenericService<TEntity, TDto> service)
@@ -18,6 +19,7 @@ namespace AirportWarehouse.Controllers
             _service = service;
         }
         [HttpGet]
+        [UsesControllerQueryFilterAttribute]
         public async Task<ActionResult<IEnumerable<TDto>>> GetAll()
         {
             var includes = BuildIncludes();
@@ -26,6 +28,7 @@ namespace AirportWarehouse.Controllers
         }
 
         [HttpGet("paged")]
+        [UsesControllerQueryFilterAttribute]
         public async Task<ActionResult<IEnumerable<TDto>>> GetPaged([FromQuery] PaginationsParams paginations)
         {
             var filter = BuildFilter();

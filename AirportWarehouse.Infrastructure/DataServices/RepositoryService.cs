@@ -75,4 +75,6 @@ public class RepositoryService<T> : IRepositoryService<T> where T : BaseEntity
     {
         return await _entity.AsNoTracking().FirstOrDefaultAsync(filter).ConfigureAwait(false);
     }
+
+    IQueryable<T> IRepositoryService<T>.Query() => _entity.AsNoTracking();
 }

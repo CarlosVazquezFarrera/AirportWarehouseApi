@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using AirportWarehouse.ControllerConfig;
+using Microsoft.Extensions.Options;
 using NSwag;
 
 namespace AirportWarehouse.Config
@@ -26,6 +27,8 @@ namespace AirportWarehouse.Config
                         Title = "Warehouse API"
                     };
                 };
+
+                options.OperationProcessors.Add(new HideUnusedControllerPropertiesFilter());
             });
             return services;
         }

@@ -29,7 +29,7 @@ public static class ServicesConfig
         services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
 
         services.AddScoped<IGenericService<Entry, EntryDto>, EntryService>();
-        services.AddScoped<IGenericService<Egress, EgressDto>, EgressService>();
+        services.AddScoped<IEgressService, EgressService>();
         services.AddScoped<IProductService, ProductService>();
 
       

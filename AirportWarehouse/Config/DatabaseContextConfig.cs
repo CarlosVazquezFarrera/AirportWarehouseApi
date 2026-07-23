@@ -1,7 +1,6 @@
 ﻿using AirportWarehouse.Infrastructure.Data;
 using AirportWarehouse.Utils.Helpers.Config;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 namespace AirportWarehouse.Config;
 
 public static class DatabaseContextConfig

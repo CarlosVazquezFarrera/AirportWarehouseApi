@@ -9,5 +9,7 @@
         public Guid ApproverId { get; set; }
         public Guid ProductId { get; set; }
         public Guid? DepartmentId { get; set; }
+        public string ProductName { get; set; } = string.Empty;
+        public string ApproverName { get; set; } = string.Empty;
     }
 }

@@ -16,5 +16,7 @@ public interface IRepositoryService <T> where T : BaseEntity
         int pageZise,
         Expression<Func<T, bool>>? filter = null,
         IEnumerable<Expression<Func<T, object>>>? includes = null);
+
+   IQueryable<T> Query();
 }
 
