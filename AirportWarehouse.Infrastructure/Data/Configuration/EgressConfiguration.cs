@@ -36,6 +36,12 @@ namespace AirportWarehouse.Infrastructure.Data.Configuration
                 .HasForeignKey(d => d.DepartmentId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_EgressDepartment");
+            
+            builder.HasOne(d => d.Airport)
+                .WithMany(p => p.Egresses)
+                .HasForeignKey(d => d.AirportId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_EgressAirport");
         }
 
     }

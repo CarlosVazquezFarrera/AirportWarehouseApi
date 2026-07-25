@@ -5,10 +5,11 @@
         public int AmountRemoved { get; set; }
         public int QuantityBefore { get; set; }
         public int QuantityAfter { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
         public Guid ApproverId { get; set; }
         public Guid ProductId { get; set; }
-        public Guid? DepartmentId { get; set; }
+        public Guid DepartmentId { get; set; }
+        public Guid? AirportId { get; set; }
         public string ProductName { get; set; } = string.Empty;
         public string ApproverName { get; set; } = string.Empty;
     }

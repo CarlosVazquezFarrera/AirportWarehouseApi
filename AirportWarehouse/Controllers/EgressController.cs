@@ -2,6 +2,8 @@
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Core.ParamerEntities;
 using AirportWarehouse.Infrastructure.Interfaces.ServiceInterfaces;
+using AirportWarehouse.Utils.Helpers.Claims;
+using AirportWarehouse.Utils.Helpers.Extension;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
@@ -9,14 +11,16 @@ namespace AirportWarehouse.Controllers
 {
     public class EgressController : GenericController<Egress, EgressDto>
     {
-        public EgressController(IEgressService service) : base(service)
+        public EgressController(IEgressService service, IClaimHelper claimHelper) : base(service)
         {
            _egressService = service;
+            _claimHelper = claimHelper;
         }
         [FromQuery] public DateOnly? StartDate { get; set; }
         [FromQuery] public DateOnly? EndDate { get; set; }
         
         private readonly IEgressService _egressService;
+        private readonly IClaimHelper _claimHelper;
 
         [HttpGet("TotalUnitRemoved")]
         public async Task<ActionResult> CountTotalEgressMovement([FromQuery] PaginationsParams paginations, [FromQuery] DateOnly? Date)
@@ -29,13 +33,20 @@ namespace AirportWarehouse.Controllers
 
         protected override Expression<Func<EgressDto, bool>>? BuildFilter()
         {
-            if (!StartDate.HasValue || !EndDate.HasValue)
-                return null;
+            Guid AirportId = _claimHelper.GetAirportId();
 
-            var start = StartDate.Value.ToDateTime(TimeOnly.MinValue);
-            var end = EndDate.Value.ToDateTime(TimeOnly.MinValue).AddDays(1);
-            return e => (!StartDate.HasValue || e.Date >= start)
-                && (!EndDate.HasValue || e.Date <= end);
+            DateTime? start = null;
+            DateTime? end = null;
+
+            if (StartDate.HasValue)
+                start = StartDate.MinValue();
+
+            if (EndDate.HasValue)
+                end = EndDate.MinValue().AddDays(1);
+
+            return e => e.AirportId == AirportId
+                && (!start.HasValue || e.Date >= start.Value)
+                && (!end.HasValue || e.Date <= end.Value); 
         }  
         protected override IEnumerable<Expression<Func<Egress, object>>>? BuildIncludes()
         => [
