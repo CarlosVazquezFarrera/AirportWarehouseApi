@@ -12,5 +12,6 @@ public class EgressMappingProfile : MappingProfile<Egress, EgressDto>
         Map(dto => dto.ApproverName, entity => string.Concat(entity.Approver.Name," ", entity.Approver.LastName));
 
         MapToEntity(entity => entity.ApproverId, _ => claimHelper.GetUserId());
+        MapToEntity(entity => entity.AirportId, _ => claimHelper.GetAirportId());
     }
 }
