@@ -4,7 +4,7 @@ public class ConfigOptionsHelper : IConfigOptionsHelper
 {
     public string GetConnectionString()
     {
-        return Environment.GetEnvironmentVariable("ConnectionString") ??
+        return Environment.GetEnvironmentVariable("ConnectionString") ?? 
             "Host=localhost; Port=5432; Database=airportwarehouse_; Username=postgres; Password=local12345; Pooling=true;";
     }
 

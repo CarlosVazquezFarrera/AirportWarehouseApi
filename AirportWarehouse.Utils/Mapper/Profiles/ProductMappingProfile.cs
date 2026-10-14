@@ -1,6 +1,8 @@
-﻿using AirportWarehouse.Core.Dtos;
+﻿using AirportWarehouse.Core.Constants;
+using AirportWarehouse.Core.Dtos;
 using AirportWarehouse.Core.Entites;
 using AirportWarehouse.Utils.Helpers.Claims;
+using static AirportWarehouse.Core.Constants.Constants;
 
 namespace AirportWarehouse.Utils.Mapper.Profiles
 {
@@ -14,19 +16,21 @@ namespace AirportWarehouse.Utils.Mapper.Profiles
             Map(dto => dto.PresentationName, entity => entity.Presentation.Name);
 
             MapToEntity(entity => entity.AirportId, dto => claimHelper.GetAirportId());
-            
+      
+            MapToEntity(entity =>  entity.Stock, dto => dto.Type == ProductType.Standard ? dto.FormatQuantity * dto.PresentationQuantity : dto.Stock);
+
             MapUpdate((entity, dto) =>
-            {
-                entity.Name = dto.Name;
-                entity.ProductFormatId = dto.ProductFormatId;
-                entity.CategoryId = dto.CategoryId;
-                entity.PackagingTypeId = dto.PackagingTypeId;
-                entity.FormatQuantity = dto.FormatQuantity;
-                entity.PresentationQuantity = dto.PresentationQuantity;
-                entity.FormatQuantity = dto.FormatQuantity;
-                entity.Stock = dto.Stock;
-                entity.AirportId = claimHelper.GetAirportId();
-            });
-        }
+                {
+                    entity.Name = dto.Name;
+                    entity.ProductFormatId = dto.ProductFormatId;
+                    entity.CategoryId = dto.CategoryId;
+                    entity.PackagingTypeId = dto.PackagingTypeId;
+                    entity.FormatQuantity = dto.FormatQuantity;
+                    entity.PresentationQuantity = dto.PresentationQuantity;
+                    entity.FormatQuantity = dto.FormatQuantity;
+                    entity.Stock = dto.Stock;
+                    entity.AirportId = claimHelper.GetAirportId();
+                });
+            }
     }
 }

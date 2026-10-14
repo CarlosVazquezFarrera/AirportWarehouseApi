@@ -1,4 +1,6 @@
-﻿namespace AirportWarehouse.Core.Dtos
+﻿using static AirportWarehouse.Core.Constants.Constants;
+
+namespace AirportWarehouse.Core.Dtos
 {
     public class ProductDto : BaseDto
     {
@@ -16,5 +18,6 @@
         public string ProductFormatName { get; set; } = string.Empty;
         public string PresentationName { get; set; } = string.Empty;
         public string CategoryName { get; set; } = string.Empty;
+        public ProductType Type { get; set; } = ProductType.Standard;
     }
 }
