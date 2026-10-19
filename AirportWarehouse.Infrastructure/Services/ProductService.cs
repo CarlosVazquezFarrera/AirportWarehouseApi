@@ -4,6 +4,7 @@ using AirportWarehouse.Core.Exceptions;
 using AirportWarehouse.Infrastructure.Interfaces.DataInterfaces;
 using AirportWarehouse.Infrastructure.Interfaces.ServiceInterfaces;
 using AirportWarehouse.Utils.Mapper;
+using static AirportWarehouse.Core.Constants.Constants;
 
 namespace AirportWarehouse.Infrastructure.Services
 {
@@ -57,6 +58,12 @@ namespace AirportWarehouse.Infrastructure.Services
 
             await _uow.SaveChangesAsync().ConfigureAwait(false);
             return _mapper.ToDto(updated);
+        }
+
+        public override Task<ProductDto> CreateAsync(ProductDto dto)
+        {
+            dto.Stock = dto.Type == ProductType.Standard ? dto.FormatQuantity * dto.PresentationQuantity : dto.Stock;
+            return base.CreateAsync(dto);
         }
     }
 }

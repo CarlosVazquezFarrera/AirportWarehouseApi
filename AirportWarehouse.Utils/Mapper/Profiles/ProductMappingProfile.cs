@@ -16,8 +16,6 @@ namespace AirportWarehouse.Utils.Mapper.Profiles
 
             MapToEntity(entity => entity.AirportId, dto => claimHelper.GetAirportId());
       
-            MapToEntity(entity =>  entity.Stock, dto => dto.Type == ProductType.Standard ? dto.FormatQuantity * dto.PresentationQuantity : dto.Stock);
-
             MapUpdate((entity, dto) =>
                 {
                     entity.Name = dto.Name;
