@@ -14,9 +14,8 @@ public static class CorsConfig
                                       "http://localhost:4200",
                                       "http://localhost:80",
                                       "http://localhost",
-                                      "http://137.184.230.117",
-                                      "http://airportwarehouse.com.mx",
-                                      "https://airportwarehouse.com.mx",
+                                      "https://airportwarehouse.carlos-vazquez-unach.workers.dev/",
+                                      "https://airportwarehouse.carlos-vazquez-unach.workers.dev",
                                       "https://airportwarehouse.vercel.app"
                                    )
                                   .AllowAnyHeader()
